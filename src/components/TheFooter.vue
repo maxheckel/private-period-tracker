@@ -4,7 +4,12 @@
     <div class="container mx-auto px-8">
       <div class="w-full flex flex-col md:flex-row py-6">
         <div class="flex-1 mb-6 text-black">
-
+          <a
+              class="toggleColour text-gray-700 no-underline hover:no-underline font-bold text-2xl lg:text-4xl"
+              href="#"
+          >
+            Private Period Tracker
+          </a>
         </div>
         <div class="flex-1">
           <p class="uppercase text-gray-500 md:mb-6">Links</p>
@@ -13,96 +18,33 @@
               <a
                   href="#"
                   class="no-underline hover:underline text-gray-800 hover:text-pink-500"
-              >FAQ</a
+              >Sign Up</a
               >
             </li>
             <li class="mt-2 inline-block mr-2 md:block md:mr-0">
               <a
                   href="#"
                   class="no-underline hover:underline text-gray-800 hover:text-pink-500"
-              >Help</a
+              >Log In</a
               >
             </li>
             <li class="mt-2 inline-block mr-2 md:block md:mr-0">
               <a
                   href="#"
                   class="no-underline hover:underline text-gray-800 hover:text-pink-500"
-              >Support</a
+              >Dashboard</a
               >
             </li>
           </ul>
         </div>
+        <div class="flex-1"></div>
         <div class="flex-1">
-          <p class="uppercase text-gray-500 md:mb-6">Legal</p>
-          <ul class="list-reset mb-6">
-            <li class="mt-2 inline-block mr-2 md:block md:mr-0">
-              <a
-                  href="#"
-                  class="no-underline hover:underline text-gray-800 hover:text-pink-500"
-              >Terms</a
-              >
-            </li>
-            <li class="mt-2 inline-block mr-2 md:block md:mr-0">
-              <a
-                  href="#"
-                  class="no-underline hover:underline text-gray-800 hover:text-pink-500"
-              >Privacy</a
-              >
-            </li>
-          </ul>
+          <p class="uppercase text-gray-500 md:mb-6">Donate</p>
+          <p class="text-sm">Because this services is provided for free, the hosting relies upon donations to keep the lights on.
+            Please consider donating and do not give more than you can afford.</p>
+
         </div>
-        <div class="flex-1">
-          <p class="uppercase text-gray-500 md:mb-6">Social</p>
-          <ul class="list-reset mb-6">
-            <li class="mt-2 inline-block mr-2 md:block md:mr-0">
-              <a
-                  href="#"
-                  class="no-underline hover:underline text-gray-800 hover:text-pink-500"
-              >Facebook</a
-              >
-            </li>
-            <li class="mt-2 inline-block mr-2 md:block md:mr-0">
-              <a
-                  href="#"
-                  class="no-underline hover:underline text-gray-800 hover:text-pink-500"
-              >Linkedin</a
-              >
-            </li>
-            <li class="mt-2 inline-block mr-2 md:block md:mr-0">
-              <a
-                  href="#"
-                  class="no-underline hover:underline text-gray-800 hover:text-pink-500"
-              >Twitter</a
-              >
-            </li>
-          </ul>
-        </div>
-        <div class="flex-1">
-          <p class="uppercase text-gray-500 md:mb-6">Company</p>
-          <ul class="list-reset mb-6">
-            <li class="mt-2 inline-block mr-2 md:block md:mr-0">
-              <a
-                  href="#"
-                  class="no-underline hover:underline text-gray-800 hover:text-pink-500"
-              >Official Blog</a
-              >
-            </li>
-            <li class="mt-2 inline-block mr-2 md:block md:mr-0">
-              <a
-                  href="#"
-                  class="no-underline hover:underline text-gray-800 hover:text-pink-500"
-              >About Us</a
-              >
-            </li>
-            <li class="mt-2 inline-block mr-2 md:block md:mr-0">
-              <a
-                  href="#"
-                  class="no-underline hover:underline text-gray-800 hover:text-pink-500"
-              >Contact</a
-              >
-            </li>
-          </ul>
-        </div>
+
       </div>
     </div>
   </footer>

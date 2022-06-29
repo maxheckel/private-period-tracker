@@ -108,7 +108,7 @@
                 Open Source. No Trackers.
               </h3>
               <p class="text-gray-600 mb-8">
-                All code for this site is open source and welcome to review by anyone.  Zero trackers, including google analytics, ad works or any other pixels or cookies are used to track you.
+                All code for this site is <a class="text-pink-500 underline" href="https://github.com/maxheckel/private-period-tracker" target="_blank">open source</a> and welcome to review by anyone.  Zero trackers, including google analytics, ad works or any other pixels or cookies are used to track you.
                 <br />
                 <br />
               </p>
@@ -131,6 +131,22 @@
         </div>
         <div class="w-full md:w-1/3 p-6 flex flex-col flex-grow flex-shrink">
           <div
+              class="flex-1 bg-white rounded-t rounded-b-none overflow-hidden shadow"
+          >
+            <a href="#" class="flex flex-wrap no-underline hover:no-underline">
+
+              <div class="w-full font-bold text-xl text-gray-800 px-6">
+                What is "Air Gap" security?
+              </div>
+              <p class="text-gray-800 text-base px-6 mb-5">
+                <a href="https://en.wikipedia.org/wiki/Air_gap_(networking)" target="_blank" class="text-pink-500 underline inline">Air gap</a> is a term used in networking to describe how data cannot be transferred between two devices that are not connected in any way.  Because your data is stored exclusively on your device the only way to get access to your data is by having access to your device.
+              </p>
+            </a>
+          </div>
+
+        </div>
+        <div class="w-full md:w-1/3 p-6 flex flex-col flex-grow flex-shrink">
+          <div
             class="flex-1 bg-white rounded-t rounded-b-none overflow-hidden shadow"
           >
             <a href="#" class="flex flex-wrap no-underline hover:no-underline">
@@ -139,8 +155,7 @@
                 Local Storage
               </div>
               <p class="text-gray-800 text-base px-6 mb-5">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-                at ipsum eu nunc commodo posuere et sit amet ligula.
+                When you add data (such as dates of your period) the app encrypts then writes it down in your browser's storage using a tool called <a href="https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API" class="text-pink-500 underline">IndexedDB</a>.  This is then retrieved
               </p>
             </a>
           </div>
@@ -153,33 +168,16 @@
             <a href="#" class="flex flex-wrap no-underline hover:no-underline">
 
               <div class="w-full font-bold text-xl text-gray-800 px-6">
-                Lorem ipsum dolor sit amet.
+                Single device or multiple
               </div>
               <p class="text-gray-800 text-base px-6 mb-5">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-                at ipsum eu nunc commodo posuere et sit amet ligula.
+                Because of the nature of the storage your data is only available on a single device.  However, you can download all your encrypted data and upload it to another device if necessary.  The data does not sync across devices.
               </p>
             </a>
           </div>
 
         </div>
-        <div class="w-full md:w-1/3 p-6 flex flex-col flex-grow flex-shrink">
-          <div
-            class="flex-1 bg-white rounded-t rounded-b-none overflow-hidden shadow"
-          >
-            <a href="#" class="flex flex-wrap no-underline hover:no-underline">
 
-              <div class="w-full font-bold text-xl text-gray-800 px-6">
-                Lorem ipsum dolor sit amet.
-              </div>
-              <p class="text-gray-800 text-base px-6 mb-5">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-                at ipsum eu nunc commodo posuere et sit amet ligula.
-              </p>
-            </a>
-          </div>
-
-        </div>
       </div>
     </section>
 
