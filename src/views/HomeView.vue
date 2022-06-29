@@ -32,7 +32,7 @@ import opensource from "./../assets/open-source.svg";
         </div>
         <!--Right Col-->
         <div class="w-full md:w-3/5 py-6 text-center">
-          <img class="w-full md:w-4/5 z-50 ml-10 rounded-3xl " :src="woman" />
+          <img class="w-full md:w-4/5 z-50 md:ml-10 mt-10 rounded-3xl max-w-full	" :src="woman" />
         </div>
       </div>
     </div>
