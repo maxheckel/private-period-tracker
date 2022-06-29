@@ -1,3 +1,8 @@
+<script setup lang="ts">
+import woman from "./../assets/woman.svg";
+import security from "./../assets/security.svg";
+import opensource from "./../assets/open-source.svg";
+</script>
 <template>
   <main
     class="leading-normal tracking-normal text-white gradient"
@@ -27,7 +32,7 @@
         </div>
         <!--Right Col-->
         <div class="w-full md:w-3/5 py-6 text-center">
-          <img class="w-full md:w-4/5 z-50 ml-10 rounded-3xl " src="woman.svg" />
+          <img class="w-full md:w-4/5 z-50 ml-10 rounded-3xl " :src="woman" />
         </div>
       </div>
     </div>
@@ -95,12 +100,12 @@
             </p>
           </div>
           <div class="w-full sm:w-1/2 p-6">
-            <img src="security.svg">
+            <img :src="security">
           </div>
         </div>
         <div class="flex flex-wrap flex-col-reverse sm:flex-row">
           <div class="w-full sm:w-1/2 p-6 mt-6">
-            <img src="open-source.svg">
+            <img :src="opensource">
           </div>
           <div class="w-full sm:w-1/2 p-6 mt-6">
             <div class="align-middle">
@@ -234,7 +239,7 @@
       <button
         class="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
       >
-        Action!
+        Sign Up
       </button>
     </section>
    </main>

@@ -40,7 +40,7 @@
         <div class="flex-1"></div>
         <div class="flex-1">
           <p class="uppercase text-gray-500 md:mb-6">Donate</p>
-          <p class="text-sm">Because this services is provided for free, the hosting relies upon donations to keep the lights on.
+          <p class="text-sm">Because this service is provided for free, the hosting bill relies upon donations to keep the lights on.
             Please consider donating and do not give more than you can afford.</p>
 
         </div>
