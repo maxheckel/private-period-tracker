@@ -22,7 +22,7 @@ import opensource from "./../assets/open-source.svg";
             Track your period with air gap security.
           </h1>
           <p class="leading-normal text-2xl mb-8">
-            Your data never leaves your device, there's no data stored anywhere but with you.
+            Your data never leaves your device; there's no data stored anywhere but with you.
           </p>
           <button
             class="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
@@ -113,7 +113,7 @@ import opensource from "./../assets/open-source.svg";
                 Open Source. No Trackers.
               </h3>
               <p class="text-gray-600 mb-8">
-                All code for this site is <a class="text-pink-500 underline" href="https://github.com/maxheckel/private-period-tracker" target="_blank">open source</a> and welcome to review by anyone.  Zero trackers, including google analytics, ad works or any other pixels or cookies are used to track you.
+                All code for this site is <a class="text-pink-500 underline" href="https://github.com/maxheckel/private-period-tracker" target="_blank">open source</a> and welcome to be reviewed by anyone.  Zero trackers, including google analytics, ad works, or any other pixels or cookies are used to track you.
                 <br />
                 <br />
               </p>
@@ -160,7 +160,7 @@ import opensource from "./../assets/open-source.svg";
                 Local Storage
               </div>
               <p class="text-gray-800 text-base px-6 mb-5">
-                When you add data (such as dates of your period) the app encrypts then writes it down in your browser's storage using a tool called <a href="https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API" class="text-pink-500 underline">IndexedDB</a>.
+                When you add data (such as dates of your period) the app encrypts and then saves it in your browser's storage using a tool called <a href="https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API" class="text-pink-500 underline">IndexedDB</a>.
               </p>
             </div>
           </div>
@@ -236,12 +236,13 @@ import opensource from "./../assets/open-source.svg";
       <h3 class="my-4 text-3xl leading-tight">
         Start tracking your period knowing your data is safe today.
       </h3>
+      <router-link to="/sign-up">
       <button
         class="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
       >
         Sign Up
       </button>
+      </router-link>
     </section>
    </main>
 </template>
-

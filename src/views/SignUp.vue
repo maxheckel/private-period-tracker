@@ -7,7 +7,7 @@ import signup from "./../assets/signup.svg";
     style="font-family: 'Source Sans Pro', sans-serif"
   >
     <div class="h-20"></div>
-    <div class="grid grid-cols-2">
+    <div class="md:grid md:grid-cols-2">
       <div class="flex flex-col sm:justify-center items-center sm:pt-0 pt-20">
         <h1 class="mt-4 text-4xl font-bold text-pink-50 leading-tight">
           Sign Up
@@ -17,8 +17,8 @@ import signup from "./../assets/signup.svg";
         >
           <h2 class="text-xl">Write this down.</h2>
           This password will be used to encrypt your data on your browser.
-          Because there is no backend service there is no way to recover your
-          password. Once you've signed in your session will last one week then
+          Because there is no backend service <span class="font-bold"> there is no way to recover your
+          password</span> if you forget it. Once you've signed in your session will last one week then
           you will have to re-enter your password.
         </div>
         <div
