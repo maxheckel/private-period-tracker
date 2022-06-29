@@ -1,0 +1,15 @@
+{
+    "name": "maxheckel/period-tracker",
+    "autoload": {
+        "psr-4": {
+            "Maxheckel\\PeriodTracker\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Max Heckel",
+            "email": "heckel.max@gmail.com"
+        }
+    ],
+    "require": {}
+}
