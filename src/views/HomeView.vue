@@ -138,7 +138,7 @@ import opensource from "./../assets/open-source.svg";
           <div
               class="flex-1 bg-white rounded-t rounded-b-none overflow-hidden shadow"
           >
-            <a href="#" class="flex flex-wrap no-underline hover:no-underline">
+            <div class="flex flex-wrap no-underline hover:no-underline">
 
               <div class="w-full font-bold text-xl text-gray-800 px-6">
                 What is "Air Gap" security?
@@ -146,7 +146,7 @@ import opensource from "./../assets/open-source.svg";
               <p class="text-gray-800 text-base px-6 mb-5">
                 <a href="https://en.wikipedia.org/wiki/Air_gap_(networking)" target="_blank" class="text-pink-500 underline inline">Air gap</a> is a term used in networking to describe how data cannot be transferred between two devices that are not connected in any way.  Because your data is stored exclusively on your device the only way to get access to your data is by having access to your device.
               </p>
-            </a>
+            </div>
           </div>
 
         </div>
@@ -154,15 +154,15 @@ import opensource from "./../assets/open-source.svg";
           <div
             class="flex-1 bg-white rounded-t rounded-b-none overflow-hidden shadow"
           >
-            <a href="#" class="flex flex-wrap no-underline hover:no-underline">
+            <div href="#" class="flex flex-wrap no-underline hover:no-underline">
 
               <div class="w-full font-bold text-xl text-gray-800 px-6">
                 Local Storage
               </div>
               <p class="text-gray-800 text-base px-6 mb-5">
-                When you add data (such as dates of your period) the app encrypts then writes it down in your browser's storage using a tool called <a href="https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API" class="text-pink-500 underline">IndexedDB</a>.  This is then retrieved
+                When you add data (such as dates of your period) the app encrypts then writes it down in your browser's storage using a tool called <a href="https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API" class="text-pink-500 underline">IndexedDB</a>.
               </p>
-            </a>
+            </div>
           </div>
 
         </div>
@@ -170,7 +170,7 @@ import opensource from "./../assets/open-source.svg";
           <div
             class="flex-1 bg-white rounded-t rounded-b-none overflow-hidden shadow"
           >
-            <a href="#" class="flex flex-wrap no-underline hover:no-underline">
+            <div href="#" class="flex flex-wrap no-underline hover:no-underline">
 
               <div class="w-full font-bold text-xl text-gray-800 px-6">
                 Single device or multiple
@@ -178,7 +178,7 @@ import opensource from "./../assets/open-source.svg";
               <p class="text-gray-800 text-base px-6 mb-5">
                 Because of the nature of the storage your data is only available on a single device.  However, you can download all your encrypted data and upload it to another device if necessary.  The data does not sync across devices.
               </p>
-            </a>
+            </div>
           </div>
 
         </div>
