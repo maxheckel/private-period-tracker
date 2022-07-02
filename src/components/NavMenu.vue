@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import AppLogo from "@/components/AppLogo.vue";
+import { isAuthed } from "@/services/accounts";
+
 </script>
 <template>
   <!--Nav-->
@@ -7,7 +9,6 @@ import AppLogo from "@/components/AppLogo.vue";
     <div
       class="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 py-2"
     >
-
       <div class="pl-4 flex items-center">
         <AppLogo />
       </div>
@@ -32,11 +33,13 @@ import AppLogo from "@/components/AppLogo.vue";
       >
         <ul class="list-reset lg:flex justify-end flex-1 items-center">
           <li class="mr-3">
-            <a
-              class="inline-block text-black no-underline hover:text-gray-800 hover:text-underline py-2 px-4"
-              href="#"
-              >Dashboard</a
-            >
+            <router-link to="/dashboard">
+              <span
+                class="inline-block text-black no-underline hover:text-gray-800 hover:text-underline py-2 px-4"
+                href="#"
+                >Dashboard</span
+              >
+            </router-link>
           </li>
         </ul>
         <RouterLink to="sign-up">
