@@ -21,10 +21,12 @@ import SetupQuestion from "@/components/SetupQuestion.vue";
       </p>
       <setup-question v-model="onItNow" question-type="boolean" question-text="Are you currently on your period?" question-number="1"></setup-question>
       <setup-question v-if="onItNow === true" v-model="currentPeriodStart" question-type="date" question-text="When did your current period start?"></setup-question>
-      <setup-question v-model="birthControl" question-type="boolean" question-text="Are you currently on birth control?" question-number="2"></setup-question>
+      <setup-question v-model="lastPeriodStart" question-type="date" question-text="When did your last period start?" question-number="2"></setup-question>
+      <setup-question  v-model="length" question-type="number" question-text="How many days do your periods generally last?" question-number="3"></setup-question>
+      <setup-question v-model="birthControl" question-type="boolean" question-text="Are you currently on birth control?" question-number="4"></setup-question>
       <setup-question v-if="birthControl" v-model="birthControlType" question-type="text" question-text="What birth control are you on?"></setup-question>
-      <setup-question v-model="lastPeriodEnd" question-type="date" question-text="When did your last period end?" question-number="3"></setup-question>
-      <setup-question  v-model="length" question-type="number" question-text="How many days do your periods generally last?" question-number="5"></setup-question>
+
+
 
       <button class=" inline-flex items-center px-4 py-2 bg-pink-500  drop-shadow-lg mb-10 border border-transparent rounded-md font-semibold text-2xl text-white  tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">Save</button>
 
@@ -39,7 +41,7 @@ export default {
   data() {
     return {
       length: "",
-      lastPeriodEnd: "",
+      lastPeriodStart: "",
       currentPeriodStart: "",
       birthControlType: "",
       birthControl: false,

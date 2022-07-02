@@ -14,7 +14,12 @@ export function register(password: string) {
 }
 
 export function isAuthed(): boolean {
+  console.log("awoeighaoweihgoihw")
   return !!getCookie("key");
+}
+
+export function hasAccount(): boolean{
+  return !!getCookie('salt');
 }
 
 export function login(password: string, salt: string | null = null) {

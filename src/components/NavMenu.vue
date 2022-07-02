@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import AppLogo from "@/components/AppLogo.vue";
 import { isAuthed } from "@/services/accounts";
+import { isOnPeriod } from "@/services/metrics";
+
 
 </script>
 <template>
@@ -42,6 +44,7 @@ import { isAuthed } from "@/services/accounts";
             </router-link>
           </li>
         </ul>
+        <div v-if="!isAuthed()">
         <RouterLink to="sign-up">
           <button
             id="navAction"
@@ -50,6 +53,24 @@ import { isAuthed } from "@/services/accounts";
             Sign Up
           </button>
         </RouterLink>
+        </div>
+
+        <div v-if="isAuthed()">
+          <RouterLink to="sign-up">
+            <button
+                id="navAction"
+                class="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full mt-4 lg:mt-0 py-4 px-8 shadow opacity-75 focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
+            >
+
+            <span v-if="isOnPeriod()">
+              Log My Period
+            </span>
+              <span v-if="!isOnPeriod()">
+                My Period Has Started
+              </span>
+            </button>
+          </RouterLink>
+        </div>
       </div>
     </div>
     <hr class="border-b border-gray-100 opacity-25 my-0 py-0" />

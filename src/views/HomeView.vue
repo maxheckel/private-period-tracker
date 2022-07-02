@@ -2,6 +2,8 @@
 import woman from "./../assets/woman.svg";
 import security from "./../assets/security.svg";
 import opensource from "./../assets/open-source.svg";
+import { isAuthed } from "@/services/accounts";
+import { isOnPeriod } from "@/services/metrics";
 </script>
 <template>
   <main
@@ -10,6 +12,19 @@ import opensource from "./../assets/open-source.svg";
   >
     <!--Hero-->
     <div class="pt-24">
+      <RouterLink class="w-full block justify-center flex" v-if="isAuthed()" to="dashboard">
+        <button
+            id="navAction"
+            class="mx-auto relative  lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full mt-4 lg:mt-0 py-4 px-8 shadow opacity-75 focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
+        >
+            <span v-if="isOnPeriod()">
+              Log My Period
+            </span>
+          <span v-if="!isOnPeriod()">
+                My Period Has Started
+              </span>
+        </button>
+      </RouterLink>
       <div
         class="container px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center"
       >
@@ -17,6 +32,7 @@ import opensource from "./../assets/open-source.svg";
         <div
           class="flex flex-col w-full md:w-2/5 justify-center items-start text-center md:text-left"
         >
+
           <p class="uppercase tracking-loose w-full">Private Period Tracker</p>
           <h1 class="my-4 text-5xl font-bold leading-tight">
             Track your period with air gap security.
