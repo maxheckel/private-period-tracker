@@ -39,7 +39,7 @@ export default {
       if (this.questionNumber){
         return 'mb-8 p-8 bg-white rounded-2xl w-full text-black shadow-md';
       }
-      return 'mb-8 p-8 bg-white bg-opacity-80 rounded-2xl  text-black shadow-md ml-10';
+      return 'mb-8 p-8 bg-white bg-opacity-80 rounded-2xl text-black shadow-md ml-10';
     }
   }
 };

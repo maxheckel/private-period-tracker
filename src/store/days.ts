@@ -5,7 +5,7 @@ interface EncryptedDay {
   date: string;
   on_period: string;
   notes: string;
-  flow: string;
+  flow: string | undefined;
   period_ended: string;
   uuid: string;
 }
@@ -14,7 +14,7 @@ export interface DecryptedDay {
   date: Date;
   on_period: boolean;
   notes: string;
-  flow: number;
+  flow: number | undefined;
   period_ended: boolean;
   uuid: string;
 }
@@ -36,7 +36,9 @@ function decryptDay(day: EncryptedDay): DecryptedDay {
     decrypt(day.on_period).replace(day.uuid + "|", "") === "1";
   decryptedDay.period_ended =
     decrypt(day.period_ended).replace(day.uuid + "|", "") === "1";
-  decryptedDay.flow = +decrypt(day.flow).replace(day.uuid + "|", "");
+  if (day.flow !== undefined){
+    decryptedDay.flow = +decrypt(day.flow).replace(day.uuid + "|", "");
+  }
   decryptedDay.uuid = day.uuid;
   return decryptedDay;
 }
@@ -48,7 +50,10 @@ function encryptDay(day: DecryptedDay) {
   }
   encrypted.uuid = day.uuid;
   encrypted.date = encrypt(encrypted.uuid + "|" + day.date.toDateString());
-  encrypted.flow = encrypt(encrypted.uuid + "|" + day.flow.toString());
+  if (day.flow !== undefined){
+    encrypted.flow = encrypt(encrypted.uuid + "|" + day.flow.toString());
+  }
+
   encrypted.notes = encrypt(encrypted.uuid + "|" + day.notes);
   encrypted.on_period = encrypt(
     encrypted.uuid + "|" + day.on_period ? "1" : "0"

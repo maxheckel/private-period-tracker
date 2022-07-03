@@ -1,7 +1,4 @@
-<script setup lang="ts">
 
-import SetupQuestion from "@/components/SetupQuestion.vue";
-</script>
 <template>
   <main
     class="leading-normal tracking-normal text-white gradient"
@@ -19,36 +16,112 @@ import SetupQuestion from "@/components/SetupQuestion.vue";
         <router-link to="dashboard" class="underline">click here</router-link>
         to skip the setup process.
       </p>
-      <setup-question v-model="onItNow" question-type="boolean" question-text="Are you currently on your period?" question-number="1"></setup-question>
-      <setup-question v-if="onItNow === true" v-model="currentPeriodStart" question-type="date" question-text="When did your current period start?"></setup-question>
-      <setup-question v-model="lastPeriodStart" question-type="date" question-text="When did your last period start?" question-number="2"></setup-question>
-      <setup-question  v-model="length" question-type="number" question-text="How many days do your periods generally last?" question-number="3"></setup-question>
-      <setup-question v-model="birthControl" question-type="boolean" question-text="Are you currently on birth control?" question-number="4"></setup-question>
-      <setup-question v-if="birthControl" v-model="birthControlType" question-type="text" question-text="What birth control are you on?"></setup-question>
-
-
-
-      <button class=" inline-flex items-center px-4 py-2 bg-pink-500  drop-shadow-lg mb-10 border border-transparent rounded-md font-semibold text-2xl text-white  tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">Save</button>
+      <setup-question
+        v-model="data.onItNow"
+        question-type="boolean"
+        question-text="Are you currently on your period?"
+        question-number="1"
+      ></setup-question>
+      <setup-question
+        v-if="data.onItNow === true"
+        v-model="data.currentPeriodStart"
+        question-type="date"
+        question-text="When did your current period start?"
+      ></setup-question>
+      <setup-question
+        v-model="data.lastPeriodStart"
+        question-type="date"
+        question-text="When did your last period start?"
+        question-number="2"
+      ></setup-question>
+      <setup-question
+        v-model="data.length"
+        question-type="number"
+        question-text="How many days do your periods generally last?"
+        question-number="3"
+      ></setup-question>
+      <setup-question
+        v-model="data.birthControl"
+        question-type="boolean"
+        question-text="Are you currently on birth control?"
+        question-number="4"
+      ></setup-question>
+      <setup-question
+        v-if="data.birthControl"
+        v-model="data.birthControlType"
+        question-type="text"
+        question-text="What birth control are you on?"
+      ></setup-question>
+      <setup-question
+        v-if="data.birthControl"
+        v-model="data.birthControlStartDate"
+        question-type="date"
+        question-text="When did you start this birth control?"
+      ></setup-question>
+      <div class="w-full">
+        <button
+            @click="save"
+            class="inline-flex items-center px-4 py-2 bg-white text-pink-500 drop-shadow-lg mb-10 border border-transparent rounded-md font-semibold text-2xl text-white tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150"
+        >
+          Save
+        </button>
+      </div>
 
     </div>
   </main>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
+import { reactive } from "vue";
+import SetupQuestion from "@/components/SetupQuestion.vue";
+import type {DecryptedDay} from "@/store/days";
+import {days} from "@/store/days";
+import type {BirthControlDecrypted} from "@/store/birthcontrol";
+import {birthControl} from "@/store/birthcontrol";
 
-export default {
-  name: "SetupAccount",
-  data() {
-    return {
-      length: "",
-      lastPeriodStart: "",
-      currentPeriodStart: "",
-      birthControlType: "",
-      birthControl: false,
-      onItNow: false,
-    };
-  },
-};
+const data = reactive({
+  length: 7,
+  lastPeriodStart: "",
+  currentPeriodStart: "",
+  birthControlType: "",
+  birthControl: false,
+  birthControlStartDate: "",
+  onItNow: false,
+});
+
+const save = () => {
+  const [y, m, d] = data.lastPeriodStart.split('-');
+  const lastPeriodStart = new Date();
+  lastPeriodStart.setDate(+d);
+  lastPeriodStart.setMonth(+m);
+  lastPeriodStart.setFullYear(+y);
+  console.log(lastPeriodStart);
+  for(let x = 0; x < data.length; x++){
+    const newDay = {} as DecryptedDay;
+    lastPeriodStart.setDate(lastPeriodStart.getDate() + 1)
+    newDay.date = lastPeriodStart;
+    newDay.on_period = true;
+    newDay.period_ended = false;
+    newDay.notes = "";
+    days.addDay(newDay);
+  }
+  if (data.birthControl){
+    const newBc = {} as BirthControlDecrypted;
+    newBc.name = data.birthControlType;
+    if (data.birthControlStartDate){
+      const [y, m, d] = data.birthControlStartDate.split('-');
+      const bcStart = new Date();
+      bcStart.setDate(+d);
+      bcStart.setMonth(+m);
+      bcStart.setFullYear(+y);
+      newBc.start_date = bcStart;
+    }
+    newBc.active = true;
+    newBc.average_days = data.length;
+    birthControl.addBirthControl(newBc)
+  }
+
+}
 </script>
 
 <style scoped></style>

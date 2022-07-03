@@ -58,7 +58,6 @@ import router from "@/router";
 
 const data = reactive({
   password: "",
-
   error: "",
 });
 

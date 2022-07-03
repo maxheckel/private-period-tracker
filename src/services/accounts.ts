@@ -12,6 +12,9 @@ export const account = reactive({
 })
 
 export function register(password: string) {
+  eraseCookie(saltKey);
+  eraseCookie(secretKey);
+  eraseCookie(logincheckKey);
   if (!password) {
     throw new Error("Password cannot be empty");
   }
@@ -48,10 +51,13 @@ export function login(password: string, salt: string | null = null) {
     let logincheck = getCookie(logincheckKey);
     // If the logincheck isn't set then this is their first time logging in probably
     if (!logincheck) {
-      logincheck = encrypt("success");
+      logincheck = encrypt("success", key);
+      console.log(logincheck);
       setCookie(logincheckKey, logincheck, 36500);
     }
-    if (decrypt(logincheck) !== "success") {
+    const decryptCheck = decrypt(logincheck, key);
+    console.log(decryptCheck);
+    if (decryptCheck !== "success") {
       eraseCookie(secretKey);
       throw new Error("Invalid Password");
     }
