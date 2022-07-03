@@ -1,21 +1,27 @@
-<template></template>
+<template>
+  <div class="">
+    <div class="mt-24"></div>
+    {{days}}
+  </div>
+</template>
 
 <script lang="ts">
-import type { DecryptedDay } from "@/store/days";
+import type {DecryptedDay} from "@/store/days";
+import {days} from "@/store/days";
 
 export default {
   name: "DashboardView",
-  data() {
+  data(){
     return {
-      days: [] as DecryptedDay[],
+      days: days.getDays(),
     };
   },
-  flipHeader: function () {
+  mounted() {
     const header = document.getElementById("header");
     const navaction = document.getElementById("navAction");
     const toToggle = document.querySelectorAll(".toggleColour");
     const navcontent = document.getElementById("nav-content");
-    if (!header || !navaction || !toToggle || !navcontent) {
+    if (!header || !navaction || !toToggle || !navcontent){
       return;
     }
     header.classList.add("bg-white");
@@ -31,11 +37,10 @@ export default {
     header.classList.add("shadow");
     navcontent.classList.remove("bg-gray-100");
     navcontent.classList.add("bg-white");
-  },
-  async mounted() {
-    this.flipHeader();
-  },
-};
+  }
+}
 </script>
 
-<style scoped></style>
+<style scoped>
+
+</style>

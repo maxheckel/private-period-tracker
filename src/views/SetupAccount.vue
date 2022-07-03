@@ -76,6 +76,7 @@ import type { DecryptedDay } from "@/store/days";
 import { days } from "@/store/days";
 import type { BirthControlDecrypted } from "@/store/birthcontrol";
 import { birthControl } from "@/store/birthcontrol";
+import router from "@/router";
 
 const data = reactive({
   length: 7,
@@ -88,10 +89,11 @@ const data = reactive({
 });
 
 const save = () => {
-  const [y, m, d] = data.lastPeriodStart.split("-");
+  // Add the days from their last period start date till the average end date
+  let [y, m, d] = data.lastPeriodStart.split("-");
   const lastPeriodStart = new Date();
   lastPeriodStart.setDate(+d);
-  lastPeriodStart.setMonth(+m);
+  lastPeriodStart.setMonth(+m - 1);
   lastPeriodStart.setFullYear(+y);
   console.log(lastPeriodStart);
   for (let x = 0; x < data.length; x++) {
@@ -99,10 +101,35 @@ const save = () => {
     lastPeriodStart.setDate(lastPeriodStart.getDate() + 1);
     newDay.date = lastPeriodStart;
     newDay.on_period = true;
+    if (x == Math.ceil(data.length) - 1) {
+      newDay.period_ended = true;
+    }
+    newDay.notes = "";
+    days.addDay(newDay);
+  }
+
+  // Add the days from their current period start till today
+  [y, m, d] = data.currentPeriodStart.split("-");
+  const currentPeriodStart = new Date();
+  currentPeriodStart.setDate(+d);
+  currentPeriodStart.setMonth(+m - 1);
+  currentPeriodStart.setFullYear(+y);
+  const numDays = Math.floor(
+    (Date.parse(new Date().toDateString()) -
+      Date.parse(currentPeriodStart.toDateString())) /
+      86400000
+  );
+
+  for (let x = 0; x < Math.ceil(numDays); x++) {
+    const newDay = {} as DecryptedDay;
+    currentPeriodStart.setDate(currentPeriodStart.getDate() + 1);
+    newDay.date = currentPeriodStart;
+    newDay.on_period = true;
     newDay.period_ended = false;
     newDay.notes = "";
     days.addDay(newDay);
   }
+
   if (data.birthControl) {
     const newBc = {} as BirthControlDecrypted;
     newBc.name = data.birthControlType;
@@ -118,6 +145,7 @@ const save = () => {
     newBc.average_days = data.length;
     birthControl.addBirthControl(newBc);
   }
+  router.push({ path: "/dashboard" });
 };
 </script>
 

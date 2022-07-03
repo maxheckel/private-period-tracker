@@ -34,9 +34,10 @@ function decryptDay(day: EncryptedDay): DecryptedDay {
   decryptedDay.date = new Date(decrypt(day.date).replace(day.uuid + "|", ""));
   decryptedDay.on_period =
     decrypt(day.on_period).replace(day.uuid + "|", "") === "1";
+
   decryptedDay.period_ended =
     decrypt(day.period_ended).replace(day.uuid + "|", "") === "1";
-  if (day.flow !== undefined){
+  if (day.flow !== undefined) {
     decryptedDay.flow = +decrypt(day.flow).replace(day.uuid + "|", "");
   }
   decryptedDay.uuid = day.uuid;
@@ -50,7 +51,7 @@ function encryptDay(day: DecryptedDay) {
   }
   encrypted.uuid = day.uuid;
   encrypted.date = encrypt(encrypted.uuid + "|" + day.date.toDateString());
-  if (day.flow !== undefined){
+  if (day.flow !== undefined) {
     encrypted.flow = encrypt(encrypted.uuid + "|" + day.flow.toString());
   }
 
@@ -58,8 +59,9 @@ function encryptDay(day: DecryptedDay) {
   encrypted.on_period = encrypt(
     encrypted.uuid + "|" + day.on_period ? "1" : "0"
   );
+
   encrypted.period_ended = encrypt(
-    encrypted.uuid + "|" + day.period_ended ? "1" : "0"
+    encrypted.uuid + "|" + (day.period_ended ? "1" : "0")
   );
   return encrypted;
 }
@@ -101,6 +103,9 @@ export const days = reactive<Days>({
     this.store();
   },
   getDays(): DecryptedDay[] {
+    if (this.days.length === 0) {
+      this.load();
+    }
     const decrypted = [] as DecryptedDay[];
     this.days.forEach(function (day) {
       decrypted.push(decryptDay(day));

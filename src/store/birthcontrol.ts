@@ -78,8 +78,12 @@ export const birthControl = reactive<BirthControlTracker>({
   birthControls: [],
   addBirthControl(bc: BirthControlDecrypted): void {
     this.birthControls.push(encryptBirthControl(bc));
+    this.store();
   },
   getBirthControls(): BirthControlDecrypted[] {
+    if (this.birthControls.length == 0){
+      this.load();
+    }
     const decrypted = [] as BirthControlDecrypted[];
     this.birthControls.forEach((enc) => {
       decrypted.push(decryptBirthControl(enc));
@@ -95,6 +99,7 @@ export const birthControl = reactive<BirthControlTracker>({
     this.birthControls = this.birthControls.filter(function (check) {
       return check.uuid != bc.uuid;
     });
+    this.store();
   },
   updateBirthControl(bc: BirthControlDecrypted): void {
     for (let x = 0; x < this.birthControls.length; x++) {
@@ -103,6 +108,7 @@ export const birthControl = reactive<BirthControlTracker>({
         return;
       }
     }
+    this.store();
   },
   load(): void {
     const raw = localStorage.getItem("birthControls");
