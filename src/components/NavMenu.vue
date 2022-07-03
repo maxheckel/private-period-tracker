@@ -2,8 +2,6 @@
 import AppLogo from "@/components/AppLogo.vue";
 import { isAuthed } from "@/services/accounts";
 import { isOnPeriod } from "@/services/metrics";
-
-
 </script>
 <template>
   <!--Nav-->
@@ -35,39 +33,54 @@ import { isOnPeriod } from "@/services/metrics";
       >
         <ul class="list-reset lg:flex justify-end flex-1 items-center">
           <li class="mr-3">
-            <router-link to="/dashboard">
+            <router-link to="/dashboard" >
               <span
-                class="inline-block text-black no-underline hover:text-gray-800 hover:text-underline py-2 px-4"
-                href="#"
-                >Dashboard</span
+                  class="inline-block text-black no-underline hover:text-gray-800 hover:text-underline py-2 px-4"
+                  href="#"
+              >Dashboard</span
+              >
+            </router-link>
+          </li>
+          <li class="mr-3" v-if="isAuthed()">
+            <router-link to="/logout">
+              <span
+                  class="inline-block text-black no-underline hover:text-gray-800 hover:text-underline py-2 px-4"
+                  href="#"
+              >Log Out</span
+              >
+            </router-link>
+          </li>
+          <li class="mr-3" v-if="!isAuthed()">
+            <router-link to="/login">
+              <span
+                  class="inline-block text-black no-underline hover:text-gray-800 hover:text-underline py-2 px-4"
+                  href="#"
+              >Log In</span
               >
             </router-link>
           </li>
         </ul>
         <div v-if="!isAuthed()">
-        <RouterLink to="sign-up">
-          <button
-            id="navAction"
-            class="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full mt-4 lg:mt-0 py-4 px-8 shadow opacity-75 focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
-          >
-            Sign Up
-          </button>
-        </RouterLink>
+          <RouterLink to="sign-up">
+            <button
+              id="navAction"
+              class="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full mt-4 lg:mt-0 py-4 px-8 shadow opacity-75 focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
+            >
+              Sign Up
+            </button>
+          </RouterLink>
         </div>
 
         <div v-if="isAuthed()">
-          <RouterLink to="sign-up">
+          <RouterLink
+            :to="isOnPeriod() ? 'dashboard#log' : 'dashboard#started'"
+          >
             <button
-                id="navAction"
-                class="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full mt-4 lg:mt-0 py-4 px-8 shadow opacity-75 focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
+              id="navAction"
+              class="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full mt-4 lg:mt-0 py-4 px-8 shadow opacity-75 focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
             >
-
-            <span v-if="isOnPeriod()">
-              Log My Period
-            </span>
-              <span v-if="!isOnPeriod()">
-                My Period Has Started
-              </span>
+              <span v-if="isOnPeriod()"> Log My Period </span>
+              <span v-if="!isOnPeriod()"> My Period Has Started </span>
             </button>
           </RouterLink>
         </div>
@@ -78,6 +91,7 @@ import { isOnPeriod } from "@/services/metrics";
 </template>
 
 <script lang="ts">
+
 export default {
   async mounted() {
     let scrollpos = window.scrollY;
@@ -163,6 +177,11 @@ export default {
     }
   },
   name: "NavMenu",
+  data: () => {
+    return {
+      isAuthed: 0
+    }
+  }
 };
 </script>
 

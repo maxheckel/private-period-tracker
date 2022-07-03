@@ -1,10 +1,11 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
-import { isAuthed } from "@/services/accounts";
+import { isAuthed, logout } from "@/services/accounts";
 
-function redirectIfNotAuthed(){
+
+function redirectIfNotAuthed() {
   if (!isAuthed()) {
-    return {name: "sign-up"}
+    return { name: "sign-up" };
   }
   return true;
 }
@@ -21,13 +22,13 @@ const router = createRouter({
       path: "/setup",
       name: "setup",
       component: () => import("../views/SetupAccount.vue"),
-      beforeEnter:[redirectIfNotAuthed],
+      beforeEnter: [redirectIfNotAuthed],
     },
     {
       path: "/dashboard",
       name: "dashboard",
       component: () => import("../views/DashboardView.vue"),
-      beforeEnter:[redirectIfNotAuthed],
+      beforeEnter: [redirectIfNotAuthed],
     },
     {
       path: "/sign-up",
@@ -35,7 +36,15 @@ const router = createRouter({
       component: () => import("../views/SignUp.vue"),
     },
     {
-      path: "/log-in",
+      path: "/logout",
+      redirect: () => {
+        logout();
+        isAuthed();
+        return { path: "/" };
+      },
+    },
+    {
+      path: "/login",
       name: "login",
       component: () => import("../views/LogIn.vue"),
     },
