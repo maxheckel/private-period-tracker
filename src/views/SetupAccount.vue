@@ -1,4 +1,3 @@
-
 <template>
   <main
     class="leading-normal tracking-normal text-white gradient"
@@ -60,13 +59,12 @@
       ></setup-question>
       <div class="w-full">
         <button
-            @click="save"
-            class="inline-flex items-center px-4 py-2 bg-white text-pink-500 drop-shadow-lg mb-10 border border-transparent rounded-md font-semibold text-2xl text-white tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150"
+          @click="save"
+          class="inline-flex items-center px-4 py-2 bg-white text-pink-500 drop-shadow-lg mb-10 border border-transparent rounded-md font-semibold text-2xl text-white tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150"
         >
           Save
         </button>
       </div>
-
     </div>
   </main>
 </template>
@@ -74,10 +72,10 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import SetupQuestion from "@/components/SetupQuestion.vue";
-import type {DecryptedDay} from "@/store/days";
-import {days} from "@/store/days";
-import type {BirthControlDecrypted} from "@/store/birthcontrol";
-import {birthControl} from "@/store/birthcontrol";
+import type { DecryptedDay } from "@/store/days";
+import { days } from "@/store/days";
+import type { BirthControlDecrypted } from "@/store/birthcontrol";
+import { birthControl } from "@/store/birthcontrol";
 
 const data = reactive({
   length: 7,
@@ -90,26 +88,26 @@ const data = reactive({
 });
 
 const save = () => {
-  const [y, m, d] = data.lastPeriodStart.split('-');
+  const [y, m, d] = data.lastPeriodStart.split("-");
   const lastPeriodStart = new Date();
   lastPeriodStart.setDate(+d);
   lastPeriodStart.setMonth(+m);
   lastPeriodStart.setFullYear(+y);
   console.log(lastPeriodStart);
-  for(let x = 0; x < data.length; x++){
+  for (let x = 0; x < data.length; x++) {
     const newDay = {} as DecryptedDay;
-    lastPeriodStart.setDate(lastPeriodStart.getDate() + 1)
+    lastPeriodStart.setDate(lastPeriodStart.getDate() + 1);
     newDay.date = lastPeriodStart;
     newDay.on_period = true;
     newDay.period_ended = false;
     newDay.notes = "";
     days.addDay(newDay);
   }
-  if (data.birthControl){
+  if (data.birthControl) {
     const newBc = {} as BirthControlDecrypted;
     newBc.name = data.birthControlType;
-    if (data.birthControlStartDate){
-      const [y, m, d] = data.birthControlStartDate.split('-');
+    if (data.birthControlStartDate) {
+      const [y, m, d] = data.birthControlStartDate.split("-");
       const bcStart = new Date();
       bcStart.setDate(+d);
       bcStart.setMonth(+m);
@@ -118,10 +116,9 @@ const save = () => {
     }
     newBc.active = true;
     newBc.average_days = data.length;
-    birthControl.addBirthControl(newBc)
+    birthControl.addBirthControl(newBc);
   }
-
-}
+};
 </script>
 
 <style scoped></style>
