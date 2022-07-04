@@ -3,25 +3,50 @@
     <div class="mt-24"></div>
     <div class="block justify-center flex">
       <h1 class="text-2xl font-bold">
-      <span v-if="onPeriod && currentEstimatedPeriodEndDate" class="">
-        You're currently on your period, it should end on
-        {{ currentEstimatedPeriodEndDate.toDateString() }}
-      </span>
-      <span v-if="!onPeriod && nextPeriodStartDate">
-        Your next period start date is estimated to be
-        {{ nextPeriodStartDate.toDateString() }}
-      </span>
-      <span v-else>
-        Click the button below to log your first period data.
+        <span v-if="onPeriod && currentEstimatedPeriodEndDate" class="">
+          You're currently on your period, it should end on
+          {{ currentEstimatedPeriodEndDate.toDateString() }}
+        </span>
+        <span v-if="!onPeriod && nextPeriodStartDate">
+          Your next period start date is estimated to be
+          {{ nextPeriodStartDate.toDateString() }}
+        </span>
+        <span v-else>
+          Click the button below to log your first period data.
         </span>
       </h1>
     </div>
     <div class="mt-4 block justify-center flex">
-    <div
-      class="cursor-pointer text-2xl mx-auto relative gradient inline-block p-6 rounded-full text-white font-bold drop-shadow-lg mx-auto relative"
-    >
-      Log My Period
+      <div
+        class="cursor-pointer text-2xl mx-auto relative gradient inline-block p-6 rounded-full text-white font-bold drop-shadow-lg mx-auto relative"
+      >
+        Log My Period
+      </div>
     </div>
+
+    <div
+      class="container px-3 mx-auto "
+    >
+      <!--Left Col-->
+      <div
+        class=" w-full md:text-left"
+      >
+        <div class="grid grid-cols-3 gap-10">
+          <div>
+            <h2 class="text-center text-xl my-8">Last Month</h2>
+            <CalendarView :month="lastMonthMonth" :year="lastMonthYear"></CalendarView>
+          </div>
+          <div>
+            <h2 class="text-center text-xl my-8">This Month</h2>
+            <CalendarView :month="currentMonthMonth" :year="currentMonthYear"></CalendarView>
+          </div>
+          <div>
+            <h2 class="text-center text-xl my-8">Next Month</h2>
+            <CalendarView :month="nextMonthMonth" :year="nextMonthYear"></CalendarView>
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
 </template>
@@ -34,9 +59,11 @@ import {
   getCurrentEstimatedPeriodEndDate,
   getNextEstimatedPeriodStartDate,
 } from "@/services/metrics";
+import CalendarView from "@/components/CalendarView.vue";
 
 export default {
   name: "DashboardView",
+  components: {CalendarView},
   data() {
     return {
       days: days.getDays(),
@@ -44,6 +71,38 @@ export default {
       currentEstimatedPeriodEndDate: getCurrentEstimatedPeriodEndDate(),
       nextPeriodStartDate: getNextEstimatedPeriodStartDate(),
     };
+  },
+  computed: {
+    lastMonthMonth(){
+      if (new Date().getMonth() === 0){
+        return 11;
+      }
+      return new Date().getMonth() - 1;
+    },
+    lastMonthYear(){
+      if (new Date().getMonth() === 0){
+        return new Date().getFullYear()-1;
+      }
+      return new Date().getFullYear();
+    },
+    currentMonthMonth(){
+      return new Date().getMonth();
+    },
+    currentMonthYear(){
+      return new Date().getFullYear();
+    },
+    nextMonthMonth(){
+      if (new Date().getMonth() === 11){
+        return 0;
+      }
+      return new Date().getMonth() + 1;
+    },
+    nextMonthYear(){
+      if (new Date().getMonth() === 11){
+        return new Date().getFullYear()+1;
+      }
+      return new Date().getFullYear();
+    },
   },
   mounted() {
     document.addEventListener("scroll", function () {
