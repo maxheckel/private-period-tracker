@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AppLogo from "@/components/AppLogo.vue";
-import { isAuthed } from "@/services/accounts";
-import { isOnPeriod } from "@/services/metrics";
+
+
 </script>
 <template>
   <!--Nav-->
@@ -41,7 +41,7 @@ import { isOnPeriod } from "@/services/metrics";
               >
             </router-link>
           </li>
-          <li class="mr-3" v-if="isAuthed()">
+          <li class="mr-3" v-if="authed">
             <router-link to="/logout">
               <span
                   class="inline-block text-black no-underline hover:text-gray-800 hover:text-underline py-2 px-4"
@@ -50,7 +50,7 @@ import { isOnPeriod } from "@/services/metrics";
               >
             </router-link>
           </li>
-          <li class="mr-3" v-if="!isAuthed()">
+          <li class="mr-3" v-if="!authed">
             <router-link to="/login">
               <span
                   class="inline-block text-black no-underline hover:text-gray-800 hover:text-underline py-2 px-4"
@@ -60,7 +60,7 @@ import { isOnPeriod } from "@/services/metrics";
             </router-link>
           </li>
         </ul>
-        <div v-if="!isAuthed()">
+        <div v-if="!isAuthed">
           <RouterLink to="sign-up">
             <button
               id="navAction"
@@ -71,16 +71,16 @@ import { isOnPeriod } from "@/services/metrics";
           </RouterLink>
         </div>
 
-        <div v-if="isAuthed()">
+        <div v-if="authed">
           <RouterLink
-            :to="isOnPeriod() ? 'dashboard#log' : 'dashboard#started'"
+            :to="onPeriod ? 'dashboard#log' : 'dashboard#started'"
           >
             <button
               id="navAction"
               class="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full mt-4 lg:mt-0 py-4 px-8 shadow opacity-75 focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
             >
-              <span v-if="isOnPeriod()"> Log My Period </span>
-              <span v-if="!isOnPeriod()"> My Period Has Started </span>
+              <span v-if="onPeriod"> Log My Period </span>
+              <span v-if="!onPeriod"> My Period Has Started </span>
             </button>
           </RouterLink>
         </div>
@@ -91,7 +91,8 @@ import { isOnPeriod } from "@/services/metrics";
 </template>
 
 <script lang="ts">
-
+import { isOnPeriod } from "@/services/metrics";
+import { isAuthed } from "@/services/accounts";
 export default {
   async mounted() {
     let scrollpos = window.scrollY;
@@ -176,10 +177,13 @@ export default {
       return false;
     }
   },
+  computed: {
+  },
   name: "NavMenu",
-  data: () => {
+  data() {
     return {
-      isAuthed: 0
+      authed: isAuthed(),
+      onPeriod: isOnPeriod()
     }
   }
 };

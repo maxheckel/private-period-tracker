@@ -4,6 +4,12 @@ import security from "./../assets/security.svg";
 import opensource from "./../assets/open-source.svg";
 import { isAuthed } from "@/services/accounts";
 import { isOnPeriod } from "@/services/metrics";
+import {reactive} from "vue";
+
+const data = reactive({
+  authed: isAuthed(),
+  onPeriod: isOnPeriod()
+})
 </script>
 <template>
   <main
@@ -12,15 +18,15 @@ import { isOnPeriod } from "@/services/metrics";
   >
     <!--Hero-->
     <div class="pt-24">
-      <RouterLink class="w-full block justify-center flex" v-if="isAuthed()" to="dashboard">
+      <RouterLink class="w-full block justify-center flex" v-if="data.authed" to="dashboard">
         <button
             id="navAction"
             class="mx-auto relative  lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full mt-4 lg:mt-0 py-4 px-8 shadow opacity-75 focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
         >
-            <span v-if="isOnPeriod()">
+            <span v-if="data.onPeriod">
               Log My Period
             </span>
-          <span v-if="!isOnPeriod()">
+          <span v-if="!data.onPeriod">
                 My Period Has Started
               </span>
         </button>

@@ -20,6 +20,8 @@ export interface DecryptedDay {
 }
 interface Days {
   days: EncryptedDay[];
+  decryptedDays: DecryptedDay[];
+  loaded: boolean;
   addDay(day: DecryptedDay): void;
   store(): void;
   load(): void;
@@ -68,13 +70,18 @@ function encryptDay(day: DecryptedDay) {
 
 export const days = reactive<Days>({
   days: [],
-
+  decryptedDays: [],
+  loaded: false,
   store() {
     localStorage.setItem("days", JSON.stringify(this.days));
   },
   load() {
+    if(this.loaded){
+      return;
+    }
     const raw = localStorage.getItem("days");
     if (!raw) {
+      this.loaded=true;
       return;
     }
     const daysData = JSON.parse(raw);
@@ -82,8 +89,10 @@ export const days = reactive<Days>({
     daysData.forEach((day: EncryptedDay) => {
       this.days.push(day);
     });
+    this.loaded=true;
   },
   addDay(day: DecryptedDay) {
+    this.decryptedDays.push(day);
     this.days.push(encryptDay(day));
     this.store();
   },
@@ -94,22 +103,35 @@ export const days = reactive<Days>({
         return;
       }
     }
+    for (let x = 0; x < this.decryptedDays.length; x++) {
+      if (this.decryptedDays[x].uuid == day.uuid) {
+        this.decryptedDays[x] = day;
+        return;
+      }
+    }
     this.store();
   },
   removeDay(day: DecryptedDay) {
     this.days = this.days.filter(function (check) {
       return check.uuid != day.uuid;
     });
+    this.decryptedDays = this.decryptedDays.filter(function (check) {
+      return check.uuid != day.uuid;
+    });
     this.store();
   },
   getDays(): DecryptedDay[] {
-    if (this.days.length === 0) {
+    if (this.decryptedDays.length > 0){
+      return this.decryptedDays;
+    }
+    if (this.days.length === 0 && !this.loaded) {
       this.load();
     }
     const decrypted = [] as DecryptedDay[];
     this.days.forEach(function (day) {
       decrypted.push(decryptDay(day));
     });
+    this.decryptedDays = decrypted;
     return decrypted;
   },
 });

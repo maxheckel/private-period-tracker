@@ -23,6 +23,7 @@ interface BirthControlEncrypted {
 
 interface BirthControlTracker {
   birthControls: BirthControlEncrypted[];
+  birthControlsDecrypted: BirthControlDecrypted[];
   load(): void;
   store(): void;
   getBirthControls(): BirthControlDecrypted[];
@@ -76,18 +77,24 @@ function decryptBirthControl(bc: BirthControlEncrypted): BirthControlDecrypted {
 
 export const birthControl = reactive<BirthControlTracker>({
   birthControls: [],
+  birthControlsDecrypted: [],
   addBirthControl(bc: BirthControlDecrypted): void {
     this.birthControls.push(encryptBirthControl(bc));
+    this.birthControlsDecrypted.push(bc);
     this.store();
   },
   getBirthControls(): BirthControlDecrypted[] {
-    if (this.birthControls.length == 0){
+    if (this.birthControlsDecrypted.length > 0) {
+      return this.birthControlsDecrypted;
+    }
+    if (this.birthControls.length == 0) {
       this.load();
     }
     const decrypted = [] as BirthControlDecrypted[];
     this.birthControls.forEach((enc) => {
       decrypted.push(decryptBirthControl(enc));
     });
+    this.birthControlsDecrypted = decrypted;
     return decrypted;
   },
   getCurrentBirthControl(): BirthControlDecrypted | undefined {
@@ -99,12 +106,24 @@ export const birthControl = reactive<BirthControlTracker>({
     this.birthControls = this.birthControls.filter(function (check) {
       return check.uuid != bc.uuid;
     });
+    this.birthControlsDecrypted = this.birthControlsDecrypted.filter(function (
+      check
+    ) {
+      return check.uuid != bc.uuid;
+    });
+
     this.store();
   },
   updateBirthControl(bc: BirthControlDecrypted): void {
     for (let x = 0; x < this.birthControls.length; x++) {
       if (this.birthControls[x].uuid == bc.uuid) {
         this.birthControls[x] = encryptBirthControl(bc);
+        return;
+      }
+    }
+    for (let x = 0; x < this.birthControlsDecrypted.length; x++) {
+      if (this.birthControlsDecrypted[x].uuid == bc.uuid) {
+        this.birthControlsDecrypted[x] = bc;
         return;
       }
     }
