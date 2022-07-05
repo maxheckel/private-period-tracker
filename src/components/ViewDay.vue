@@ -69,6 +69,9 @@
                   <div v-if="day !== undefined && day.flow">
                     <b>Flow: </b> {{ flowTypes[day.flow] }}
                   </div>
+                  <div v-if="day.period_ended">
+                    Your Period Ended on this day
+                  </div>
                 </div>
               </div>
             </div>

@@ -191,7 +191,12 @@ const showDay = (day: DecryptedDay) => {
 };
 
 const addDay = (index:number) => {
-  add.show(new Date(props.year, props.month, index));
+
+  const dayToAdd = new Date(props.year, props.month, index);
+  if (dayToAdd.getTime() > new Date().getTime()){
+    return;
+  }
+  add.show(dayToAdd);
 };
 </script>
 
