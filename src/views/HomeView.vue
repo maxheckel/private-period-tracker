@@ -4,12 +4,17 @@ import security from "./../assets/security.svg";
 import opensource from "./../assets/open-source.svg";
 import { isAuthed } from "@/services/accounts";
 import { isOnPeriod } from "@/services/metrics";
-import {reactive} from "vue";
+import { reactive } from "vue";
+import { add } from "@/store/add";
 
 const data = reactive({
   authed: isAuthed(),
-  onPeriod: isOnPeriod()
-})
+  onPeriod: isOnPeriod(),
+});
+
+const showModal = function (date: Date | null = null) {
+  add.show(date);
+};
 </script>
 <template>
   <main
@@ -18,19 +23,22 @@ const data = reactive({
   >
     <!--Hero-->
     <div class="pt-24">
-      <RouterLink class="w-full block justify-center flex" v-if="data.authed" to="dashboard">
+      <div
+        class="w-full block justify-center flex"
+        v-if="data.authed"
+        to="dashboard"
+      >
         <button
-            id="navAction"
-            class="mx-auto relative  lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full mt-4 lg:mt-0 py-4 px-8 shadow opacity-75 focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
+            @click="showModal()"
+          id="navAction"
+          class="mx-auto relative lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full mt-4 lg:mt-0 py-4 px-8 shadow opacity-75 focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
         >
-            <span v-if="data.onPeriod">
-              Log My Period
-            </span>
+          <span v-if="data.onPeriod" > Log My Period </span>
           <span v-if="!data.onPeriod">
-                My Period Has Started
-              </span>
+            My Period Has Started
+          </span>
         </button>
-      </RouterLink>
+      </div>
       <div
         class="container px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center"
       >
@@ -38,13 +46,13 @@ const data = reactive({
         <div
           class="flex flex-col w-full md:w-2/5 justify-center items-start text-center md:text-left"
         >
-
           <p class="uppercase tracking-loose w-full">Private Period Tracker</p>
           <h1 class="my-4 text-5xl font-bold leading-tight">
             Track your period with air gap security.
           </h1>
           <p class="leading-normal text-2xl mb-8">
-            Your data never leaves your device; there's no data stored anywhere but with you.
+            Your data never leaves your device; there's no data stored anywhere
+            but with you.
           </p>
           <button
             class="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
@@ -54,7 +62,10 @@ const data = reactive({
         </div>
         <!--Right Col-->
         <div class="w-full md:w-3/5 py-6 text-center">
-          <img class="w-full md:w-4/5 z-50 md:ml-10 mt-10 rounded-3xl max-w-full	" :src="woman" />
+          <img
+            class="w-full md:w-4/5 z-50 md:ml-10 mt-10 rounded-3xl max-w-full"
+            :src="woman"
+          />
         </div>
       </div>
     </div>
@@ -115,19 +126,21 @@ const data = reactive({
               No Database. No Problem.
             </h3>
             <p class="text-gray-600 mb-8">
-              All data you enter is stored exclusively on the device where you enter it.  There is no "back-end" service connected to this site, the only thing the server delivers is the HTML, Javascript and CSS required to run the sites.
+              All data you enter is stored exclusively on the device where you
+              enter it. There is no "back-end" service connected to this site,
+              the only thing the server delivers is the HTML, Javascript and CSS
+              required to run the sites.
               <br />
               <br />
-
             </p>
           </div>
           <div class="w-full sm:w-1/2 p-6">
-            <img :src="security">
+            <img :src="security" />
           </div>
         </div>
         <div class="flex flex-wrap flex-col-reverse sm:flex-row">
           <div class="w-full sm:w-1/2 p-6 mt-6">
-            <img :src="opensource">
+            <img :src="opensource" />
           </div>
           <div class="w-full sm:w-1/2 p-6 mt-6">
             <div class="align-middle">
@@ -135,7 +148,16 @@ const data = reactive({
                 Open Source. No Trackers.
               </h3>
               <p class="text-gray-600 mb-8">
-                All code for this site is <a class="text-pink-500 underline" href="https://github.com/maxheckel/private-period-tracker" target="_blank">open source</a> and welcome to be reviewed by anyone.  Zero trackers, including google analytics, ad works, or any other pixels or cookies are used to track you.
+                All code for this site is
+                <a
+                  class="text-pink-500 underline"
+                  href="https://github.com/maxheckel/private-period-tracker"
+                  target="_blank"
+                  >open source</a
+                >
+                and welcome to be reviewed by anyone. Zero trackers, including
+                google analytics, ad works, or any other pixels or cookies are
+                used to track you.
                 <br />
                 <br />
               </p>
@@ -158,53 +180,72 @@ const data = reactive({
         </div>
         <div class="w-full md:w-1/3 p-6 flex flex-col flex-grow flex-shrink">
           <div
-              class="flex-1 bg-white rounded-t rounded-b-none overflow-hidden shadow"
+            class="flex-1 bg-white rounded-t rounded-b-none overflow-hidden shadow"
           >
             <div class="flex flex-wrap no-underline hover:no-underline">
-
               <div class="w-full font-bold text-xl text-gray-800 px-6">
                 What is "Air Gap" security?
               </div>
               <p class="text-gray-800 text-base px-6 mb-5">
-                <a href="https://en.wikipedia.org/wiki/Air_gap_(networking)" target="_blank" class="text-pink-500 underline inline">Air gap</a> is a term used in networking to describe how data cannot be transferred between two devices that are not connected in any way.  Because your data is stored exclusively on your device the only way to get access to your data is by having access to your device.
+                <a
+                  href="https://en.wikipedia.org/wiki/Air_gap_(networking)"
+                  target="_blank"
+                  class="text-pink-500 underline inline"
+                  >Air gap</a
+                >
+                is a term used in networking to describe how data cannot be
+                transferred between two devices that are not connected in any
+                way. Because your data is stored exclusively on your device the
+                only way to get access to your data is by having access to your
+                device.
               </p>
             </div>
           </div>
-
         </div>
         <div class="w-full md:w-1/3 p-6 flex flex-col flex-grow flex-shrink">
           <div
             class="flex-1 bg-white rounded-t rounded-b-none overflow-hidden shadow"
           >
-            <div href="#" class="flex flex-wrap no-underline hover:no-underline">
-
+            <div
+              href="#"
+              class="flex flex-wrap no-underline hover:no-underline"
+            >
               <div class="w-full font-bold text-xl text-gray-800 px-6">
                 Local Storage
               </div>
               <p class="text-gray-800 text-base px-6 mb-5">
-                When you add data (such as dates of your period) the app encrypts and then saves it in your browser's storage using a tool called <a href="https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API" class="text-pink-500 underline">IndexedDB</a>.
+                When you add data (such as dates of your period) the app
+                encrypts and then saves it in your browser's storage using a
+                tool called
+                <a
+                  href="https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API"
+                  class="text-pink-500 underline"
+                  >IndexedDB</a
+                >.
               </p>
             </div>
           </div>
-
         </div>
         <div class="w-full md:w-1/3 p-6 flex flex-col flex-grow flex-shrink">
           <div
             class="flex-1 bg-white rounded-t rounded-b-none overflow-hidden shadow"
           >
-            <div href="#" class="flex flex-wrap no-underline hover:no-underline">
-
+            <div
+              href="#"
+              class="flex flex-wrap no-underline hover:no-underline"
+            >
               <div class="w-full font-bold text-xl text-gray-800 px-6">
                 Single device or multiple
               </div>
               <p class="text-gray-800 text-base px-6 mb-5">
-                Because of the nature of the storage your data is only available on a single device.  However, you can download all your encrypted data and upload it to another device if necessary.  The data does not sync across devices.
+                Because of the nature of the storage your data is only available
+                on a single device. However, you can download all your encrypted
+                data and upload it to another device if necessary. The data does
+                not sync across devices.
               </p>
             </div>
           </div>
-
         </div>
-
       </div>
     </section>
 
@@ -259,12 +300,12 @@ const data = reactive({
         Start tracking your period knowing your data is safe today.
       </h3>
       <router-link to="/sign-up">
-      <button
-        class="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
-      >
-        Sign Up
-      </button>
+        <button
+          class="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
+        >
+          Sign Up
+        </button>
       </router-link>
     </section>
-   </main>
+  </main>
 </template>

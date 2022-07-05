@@ -72,17 +72,16 @@ import AppLogo from "@/components/AppLogo.vue";
         </div>
 
         <div v-if="authed">
-          <RouterLink
-            :to="onPeriod ? 'dashboard#log' : 'dashboard#started'"
-          >
+
             <button
+                @click="showAdd"
               id="navAction"
               class="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full mt-4 lg:mt-0 py-4 px-8 shadow opacity-75 focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
             >
               <span v-if="onPeriod"> Log My Period </span>
               <span v-if="!onPeriod"> My Period Has Started </span>
             </button>
-          </RouterLink>
+
         </div>
       </div>
     </div>
@@ -93,6 +92,7 @@ import AppLogo from "@/components/AppLogo.vue";
 <script lang="ts">
 import { isOnPeriod } from "@/services/metrics";
 import { isAuthed } from "@/services/accounts";
+import {add} from "@/store/add";
 export default {
   async mounted() {
     let scrollpos = window.scrollY;
@@ -183,7 +183,12 @@ export default {
   data() {
     return {
       authed: isAuthed(),
-      onPeriod: isOnPeriod()
+      onPeriod: isOnPeriod(),
+    }
+  },
+  methods: {
+    showAdd(){
+      add.show(new Date());
     }
   }
 };

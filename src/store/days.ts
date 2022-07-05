@@ -76,12 +76,12 @@ export const days = reactive<Days>({
     localStorage.setItem("days", JSON.stringify(this.days));
   },
   load() {
-    if(this.loaded){
+    if (this.loaded) {
       return;
     }
     const raw = localStorage.getItem("days");
     if (!raw) {
-      this.loaded=true;
+      this.loaded = true;
       return;
     }
     const daysData = JSON.parse(raw);
@@ -89,9 +89,21 @@ export const days = reactive<Days>({
     daysData.forEach((day: EncryptedDay) => {
       this.days.push(day);
     });
-    this.loaded=true;
+    this.loaded = true;
   },
   addDay(day: DecryptedDay) {
+    this.decryptedDays.every((check) => {
+      // if it's the same day, remove the old day and replace it with the new
+      if (
+        day.date.getDate() == check.date.getDay() &&
+        day.date.getMonth() == check.date.getMonth() &&
+        day.date.getFullYear() == check.date.getFullYear()
+      ) {
+        this.removeDay(day);
+        return false;
+      }
+      return true;
+    });
     this.decryptedDays.push(day);
     this.days.push(encryptDay(day));
     this.store();
@@ -121,8 +133,7 @@ export const days = reactive<Days>({
     this.store();
   },
   getDays(): DecryptedDay[] {
-    if (this.decryptedDays.length > 0){
-      console.log(this.decryptedDays);
+    if (this.decryptedDays.length > 0) {
       return this.decryptedDays;
     }
     if (this.days.length === 0 && !this.loaded) {

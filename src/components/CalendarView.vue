@@ -11,54 +11,47 @@
     <div class="text-center mb-2 text-gray-400">F</div>
     <div class="text-center mb-2 text-gray-400">Sa</div>
     <div
-        class="p-4 bg-gray-200 border-t border-l border-gray-100 text-center"
-        v-for="index in firstDayBuffer"
+      class="p-4 bg-gray-200 border-t border-l border-gray-100 text-center"
+      v-for="index in firstDayBuffer"
     >
       {{ numberOfDaysLastMonth - index }}
     </div>
     <div
-        class="p-4 border-gray-100 border border-t border-l text-center"
-        v-for="index in numberOfDays"
-        v-bind:key="index"
+      class="p-4 border-gray-100 border border-t border-l text-center"
+      v-for="index in numberOfDays"
+      v-bind:key="index"
     >
       <div
-          :class="
+        :class="
           index === +today
-            ? {
-                'bg-blue-400': true,
-                'border-pink-300': true,
-                'border-2': true,
-                'rounded-full': true,
-                'text-white': true,
+            ? { 'bg-blue-400 border-pink-300 border-2 rounded-full text-white  font-bold text-gray-700 rounded-full flex items-center justify-center font-mono': true
               }
-            : { 'bg-pink-300': true, 'rounded-full': true }
+            : { 'bg-pink-300 rounded-full  font-bold text-gray-700 rounded-full bg-white flex items-center justify-center font-mono': true}
         "
-          v-if="past[index] !== undefined"
+        style="width: 30px; height: 30px;"
+        v-if="past[index] !== undefined"
       >
         {{ index }}
       </div>
       <div
-          :class="
+        :class="
           index === +today
             ? {
-                'bg-blue-400': true,
-                'border-blue-300': true,
-                'border-2': true,
-                'rounded-full': true,
-                'text-white': true,
+                'bg-blue-400 border-blue-300 border-2 rounded-full text-white  flex items-center justify-center font-mono': true,
               }
             : {
-                border: true,
-                'border-pink-300': true,
-                'border-2': true,
-                'rounded-full': true,
+                ' rounded-full border-2 border border-pink-300 flex items-center justify-center font-mono': true,
               }
         "
-          v-if="future[index]"
+        v-if="future[index]"
+        style="width: 30px; height: 30px;"
       >
         {{ index }}
       </div>
-      <div v-if="+today === index && !future[index] && !past[index]" class="bg-blue-400 rounded-full text-white">
+      <div
+        v-if="+today === index && !future[index] && !past[index]"
+        class="bg-blue-400 rounded-full text-white"
+      >
         {{ index }}
       </div>
       <div v-if="!future[index] && !past[index] && +today !== index">
@@ -67,8 +60,8 @@
     </div>
 
     <div
-        class="p-4 bg-gray-200 border-t border-l border-gray-100 text-center"
-        v-for="index in endBuffer"
+      class="p-4 bg-gray-200 border-t border-l border-gray-100 text-center"
+      v-for="index in endBuffer"
     >
       {{ index }}
     </div>
@@ -105,15 +98,15 @@ export default {
       const daysForThisMonth = {};
       // convert the days for this month into a map so they're easier to lookup
       this.days
-          .filter((day) => {
-            return (
-                day.date.getMonth() === this.month &&
-                day.date.getFullYear() === this.year
-            );
-          })
-          .forEach((day) => {
-            daysForThisMonth[day.date.getDate()] = day;
-          });
+        .filter((day) => {
+          return (
+            day.date.getMonth() === this.month &&
+            day.date.getFullYear() === this.year
+          );
+        })
+        .forEach((day) => {
+          daysForThisMonth[day.date.getDate()] = day;
+        });
 
       return daysForThisMonth;
     },

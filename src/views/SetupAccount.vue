@@ -61,7 +61,7 @@
       <div class="w-full">
         <button
           @click="save"
-          class="inline-flex items-center px-4 py-2 bg-white text-pink-500 drop-shadow-lg mb-10 border border-transparent rounded-md font-semibold text-2xl text-white tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150"
+          class="inline-flex items-center px-4 py-2 bg-white text-pink-500 drop-shadow-lg mb-10 border border-transparent rounded-md font-semibold text-2xl text-white tracking-widest hover:bg-pink-700 active:bg-pink-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150"
         >
           Save
         </button>

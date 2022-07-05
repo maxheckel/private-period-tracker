@@ -6,6 +6,7 @@
       <div class="my-4 block justify-center flex">
         <div
             class="cursor-pointer text-2xl mx-auto relative gradient inline-block p-6 rounded-full text-white font-bold drop-shadow-lg mx-auto relative"
+            @click="showAdd()"
         >
           Log My Period
         </div>
@@ -86,12 +87,18 @@ import {
 } from "@/services/metrics";
 import CalendarView from "@/components/CalendarView.vue";
 import { computed, reactive } from "vue";
+import {add} from "@/store/add";
+
 const data = reactive({
   onPeriod: isOnPeriod(),
   currentEstimatedPeriodEndDate: estimatedEndDate(),
   nextPeriodStartDate: estimatedStartDate(),
   averageDays: averageLength()
 });
+
+const showAdd = () => {
+  add.show(null)
+}
 
 const lastMonthMonth = computed(() => {
   if (currentMonthMonth.value === 0) {
