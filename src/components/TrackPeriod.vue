@@ -68,7 +68,7 @@ import { add } from "@/store/add";
                   Add Period Data
                 </h3>
                 <div class="my-4 w-full">
-                  <div class="text-red-500 mb-4" v-if="error">Error</div>
+                  <div class="text-red-500 mb-4" v-if="error">{{ error }}</div>
                   <label>
                     Are You logging one day or a span of days?
                     <select class="mt-2 rounded-3xl w-full" v-model="one_day">
@@ -81,6 +81,7 @@ import { add } from "@/store/add";
                     <label>
                       Which day are you logging?
                       <input
+                          @change="error = null"
                         class="mt-4 rounded-md text-xl shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block mt-1 w-full"
                         type="date"
                         v-model="start_date"
@@ -102,6 +103,7 @@ import { add } from "@/store/add";
                       <label>
                         Start
                         <input
+                            @change="error = null"
                           class="mt-4 rounded-md text-xl shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block mt-1 w-full"
                           type="date"
                           v-model="start_date"
@@ -112,6 +114,7 @@ import { add } from "@/store/add";
                       <label>
                         End
                         <input
+                            @change="error = null"
                           class="mt-4 rounded-md text-xl shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block mt-1 w-full"
                           type="date"
                           required
@@ -191,8 +194,13 @@ export default {
   },
   methods: {
     save() {
-      if (this.startDateObject.getTime() > this.endDateObject.getTime()) {
+      if (!this.one_day && this.startDateObject.getTime() > this.endDateObject.getTime()) {
         this.error = "Start date must come before end date";
+        return;
+      }
+      if (this.startDateObject.getTime() > new Date().getTime() && this.startDateObject.getDate() > new Date().getDate()){
+        this.error = "Start date cannot be in the future";
+        return;
       }
       if (this.one_day) {
         const day = {} as DecryptedDay;
