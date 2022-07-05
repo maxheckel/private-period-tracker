@@ -3,15 +3,20 @@ import type {DecryptedDay} from "@/store/days";
 import { birthControl } from "@/store/birthcontrol";
 
 export function isOnPeriod(): boolean {
-  const lastDay = getLastDay();
-
-  if (lastDay){
-    return !lastDay.period_ended;
+  try{
+    const lastDay = getLastDay();
+    if (lastDay){
+      return !lastDay.period_ended;
+    }
+    return false;
+  } catch (e:any){
+    return false;
   }
-  return false;
+
 }
 
 export function getLastDay(): DecryptedDay|null {
+
   const sorted =  days.getDays().sort(function (a, b) {
     return b.date.getTime() - a.date.getTime();
   });
