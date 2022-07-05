@@ -81,10 +81,11 @@ import { add } from "@/store/add";
                     <label>
                       Which day are you logging?
                       <input
-                          @change="error = null"
+                        @change="setStartDate"
                         class="mt-4 rounded-md text-xl shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block mt-1 w-full"
                         type="date"
-                        v-model="start_date"
+                        :value="add.date.toISOString().slice(0, 10)"
+
                         required
                       />
                     </label>
@@ -103,10 +104,10 @@ import { add } from "@/store/add";
                       <label>
                         Start
                         <input
-                            @change="error = null"
+                          @change="setStartDate"
                           class="mt-4 rounded-md text-xl shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block mt-1 w-full"
                           type="date"
-                          v-model="start_date"
+                          :value="add.date.toISOString().slice(0, 10)"
                           required
                         />
                       </label>
@@ -114,7 +115,7 @@ import { add } from "@/store/add";
                       <label>
                         End
                         <input
-                            @change="error = null"
+                          @change="error = null"
                           class="mt-4 rounded-md text-xl shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block mt-1 w-full"
                           type="date"
                           required
@@ -176,29 +177,46 @@ import { diffBetweenDays, isOnPeriod } from "@/services/metrics";
 import type { DecryptedDay } from "@/store/days";
 import { days } from "@/store/days";
 import router from "@/router";
+import { add } from "@/store/add";
 
 export default {
   name: "TrackPeriod",
   data() {
     return {
       one_day: true,
-      start_date: new Date().toISOString().slice(0, 10),
+      start_date: add.getDate().toISOString().slice(0, 10),
       end_date: new Date().toISOString().slice(0, 10),
       currently_on_period: isOnPeriod(),
       flow: 1,
       ended: false,
       error: "",
       on_period: true,
-
     };
   },
+
   methods: {
+    setStartDate(e) {
+      const [y, m, d] = e.target.value.split("-");
+      const dateToAdd = new Date();
+      dateToAdd.setDate(+d);
+      dateToAdd.setMonth(+m - 1);
+      dateToAdd.setFullYear(+y);
+      dateToAdd.setDate(dateToAdd.getDate());
+      console.log(dateToAdd);
+      add.show(dateToAdd);
+    },
     save() {
-      if (!this.one_day && this.startDateObject.getTime() > this.endDateObject.getTime()) {
+      if (
+        !this.one_day &&
+        this.startDateObject.getTime() > this.endDateObject.getTime()
+      ) {
         this.error = "Start date must come before end date";
         return;
       }
-      if (this.startDateObject.getTime() > new Date().getTime() && this.startDateObject.getDate() > new Date().getDate()){
+      if (
+        this.startDateObject.getTime() > new Date().getTime() &&
+        this.startDateObject.getDate() > new Date().getDate()
+      ) {
         this.error = "Start date cannot be in the future";
         return;
       }
@@ -212,6 +230,7 @@ export default {
         day.flow = this.flow;
         day.on_period = true;
         day.period_ended = this.ended;
+
         days.addDay(day);
       }
       if (!this.one_day) {
@@ -220,12 +239,15 @@ export default {
           this.startDateObject,
           this.endDateObject
         );
-        for (let x = 0; x < dayCount; x++) {
+        for (let x = 0; x < dayCount+1; x++) {
           const day = {} as DecryptedDay;
           day.date = startDate;
           day.flow = this.flow;
           day.on_period = true;
-          day.period_ended = this.ended;
+          day.period_ended = false;
+          if (x == dayCount - 1 && this.ended){
+            day.period_ended = true;
+          }
           days.addDay(day);
           startDate.setDate(startDate.getDate() + 1);
         }
@@ -239,12 +261,7 @@ export default {
       return this.startDateObject.toDateString();
     },
     startDateObject() {
-      const [y, m, d] = this.start_date.split("-");
-      const start = new Date();
-      start.setDate(+d);
-      start.setMonth(+m - 1);
-      start.setFullYear(+y);
-      return start;
+     return add.getDate();
     },
     endDateObject() {
       const [y, m, d] = this.end_date.split("-");

@@ -1,4 +1,9 @@
 <template>
+  <ViewDay
+    :day="currentDay"
+    :showing="showingDay"
+    @hide="showingDay = false"
+  ></ViewDay>
   <div class="text-center text-gray-400">
     {{ months[this.month] }} {{ this.year }}
   </div>
@@ -24,12 +29,16 @@
       <div
         :class="
           index === +today
-            ? { 'bg-blue-400 border-pink-300 border-2 rounded-full text-white  font-bold text-gray-700 rounded-full flex items-center justify-center font-mono': true
+            ? {
+                'bg-blue-400 border-pink-300 border-2 rounded-full text-white  font-bold text-gray-700 rounded-full flex items-center justify-center font-mono': true,
               }
-            : { 'bg-pink-300 rounded-full  font-bold text-gray-700 rounded-full bg-white flex items-center justify-center font-mono': true}
+            : {
+                'bg-pink-300 rounded-full  font-bold text-gray-700 rounded-full flex items-center justify-center font-mono': true,
+              }
         "
-        style="width: 30px; height: 30px;"
+        style="width: 30px; height: 30px"
         v-if="past[index] !== undefined"
+        @click="showDay(past[index])"
       >
         {{ index }}
       </div>
@@ -44,17 +53,21 @@
               }
         "
         v-if="future[index]"
-        style="width: 30px; height: 30px;"
+        style="width: 30px; height: 30px"
       >
         {{ index }}
       </div>
       <div
         v-if="+today === index && !future[index] && !past[index]"
         class="bg-blue-400 rounded-full text-white"
+        @click="addDay(index)"
       >
         {{ index }}
       </div>
-      <div v-if="!future[index] && !past[index] && +today !== index">
+      <div
+        v-if="!future[index] && !past[index] && +today !== index"
+        @click="addDay(index)"
+      >
         {{ index }}
       </div>
     </div>
@@ -68,14 +81,19 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { days } from "@/store/days";
+import type { DecryptedDay } from "@/store/days";
+import ViewDay from "@/components/ViewDay.vue";
+import { add } from "@/store/add";
 
 export default {
   name: "CalendarView",
+  components: { ViewDay },
   data() {
     return {
-      days: days.getDays(),
+      currentDay: undefined,
+      showingDay: false,
       months: [
         "January",
         "February",
@@ -96,8 +114,11 @@ export default {
   computed: {
     past() {
       const daysForThisMonth = {};
+      if (days.days.length === 0 && days.loaded){
+        return daysForThisMonth;
+      }
       // convert the days for this month into a map so they're easier to lookup
-      this.days
+      days.decryptedDays
         .filter((day) => {
           return (
             day.date.getMonth() === this.month &&
@@ -107,7 +128,6 @@ export default {
         .forEach((day) => {
           daysForThisMonth[day.date.getDate()] = day;
         });
-
       return daysForThisMonth;
     },
     future() {
@@ -119,7 +139,7 @@ export default {
       }
       nextStart = new Date(nextStart.getTime());
       for (let x = 0; x < averageDays; x++) {
-        if (nextStart.getMonth() === this.month) {
+        if (nextStart.getMonth() === this.month && nextStart.getTime() > new Date().getTime()) {
           futureDays[nextStart.getDate()] = true;
         }
         nextStart.setDate(nextStart.getDate() + 1);
@@ -150,6 +170,15 @@ export default {
       const numDaysShown = this.numberOfDays + this.firstDayBuffer;
 
       return 7 - (numDaysShown % 7);
+    },
+  },
+  methods: {
+    showDay(day: DecryptedDay) {
+      this.currentDay = day;
+      this.showingDay = true;
+    },
+    addDay(index) {
+      add.show(new Date(this.year, this.month, index));
     },
   },
 };
