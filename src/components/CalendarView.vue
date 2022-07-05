@@ -17,10 +17,10 @@
     <div class="text-center mb-2 text-gray-400">Sa</div>
     <div
       class="p-4 bg-gray-200 border-t border-l border-gray-100 text-center"
-      v-for="index in firstDayBuffer"
+      v-for="(val, index) in new Array(firstDayBuffer).fill(0).map((v, k) => k).reverse()"
       v-bind:key="index"
     >
-      {{ numberOfDaysLastMonth - (firstDayBuffer - index) }}
+      {{ numberOfDaysLastMonth - val }}
     </div>
     <div
       class="p-4 border-gray-100 border border-t border-l text-center"
@@ -29,7 +29,7 @@
     >
       <div
         :class="{
-                'rounded-full  font-bold text-gray-700 rounded-full flex items-center justify-center font-mono': true,
+                'cursor-pointer rounded-full  font-bold text-gray-700 rounded-full flex items-center justify-center font-mono': true,
                 'bg-blue-400 border-pink-300 border border-2': index === +today,
                 'bg-pink-300': index !== +today,
                 'border border-2 border-gray-500': past[index].period_ended
@@ -58,12 +58,13 @@
       </div>
       <div
         v-if="+today === index && !future[index] && !past[index]"
-        class="bg-blue-400 rounded-full text-white"
+        class="cursor-pointer bg-blue-400 rounded-full text-white"
         @click="addDay(index)"
       >
         {{ index }}
       </div>
       <div
+          class="cursor-pointer"
         v-if="!future[index] && !past[index] && +today !== index"
         @click="addDay(index)"
       >
@@ -174,11 +175,13 @@ const numberOfDaysLastMonth = computed(() => {
   if (props.month === 0) {
     return new Date(props.year, 11, 0).getDate();
   }
-  return new Date(props.year, props.month - 1, 0).getDate();
+  return new Date(props.year, props.month - 2, 0).getDate();
 });
 const endBuffer = computed(() => {
   const numDaysShown = numberOfDays.value + firstDayBuffer.value;
-
+  if (numDaysShown % 7 === 0){
+    return 0;
+  }
   return 7 - (numDaysShown % 7);
 });
 const hideDay = () => {

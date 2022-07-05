@@ -86,16 +86,22 @@ export function currentPeriodStart(): Date|null {
 export function averageTimeBetween(): number {
   const daysToConsider = getDaysToConsider();
   let total = 0;
+  let numPeriodsToIgnore = 0;
   for (let x = 0; x < daysToConsider.length; x++) {
     if (daysToConsider[x].period_ended && x != daysToConsider.length - 1) {
       const endDate = daysToConsider[x].date;
       const nextStart = daysToConsider[x + 1].date;
-      total += diffBetweenDays(endDate, nextStart);
+      const diff = diffBetweenDays(endDate, nextStart);
+      if (diff < 60){
+        total+=diff;
+      } else {
+        numPeriodsToIgnore++;
+      }
     }
   }
 
   // Subtract one because we are averaging on the time between periods not number of periods themselves
-  return total / (numberOfPeriods() - 1);
+  return total / (numberOfPeriods() - 1 - numPeriodsToIgnore);
 }
 
 export function averageLength(): number {

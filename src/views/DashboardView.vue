@@ -13,11 +13,29 @@ import { add } from "@/store/add";
 
 const data = reactive({
   days: days.decryptedDays,
+  currentMonth: new Date().getMonth(),
+  currentYear: new Date().getFullYear(),
 });
-const onPeriod = computed(isOnPeriod);
-const nextPeriodStartDate = computed(estimatedStartDate);
-const currentEstimatedPeriodEndDate = computed(estimatedEndDate);
-console.log(onPeriod.value, currentEstimatedPeriodEndDate.value);
+
+const previousMonth = () => {
+  if (data.currentMonth == 0){
+    data.currentMonth = 11;
+    data.currentYear = data.currentYear - 1;
+  }
+  data.currentMonth--;
+}
+const resetMonths = () => {
+  data.currentMonth = new Date().getMonth();
+  data.currentYear = new Date().getFullYear();
+}
+const nextMonth = () => {
+
+  if (data.currentMonth == 11){
+    data.currentMonth = 0;
+    data.currentYear = data.currentYear + 1;
+  }
+  data.currentMonth++;
+}
 const showAdd = () => {
   add.show(null);
 };
@@ -35,10 +53,10 @@ const lastMonthYear = computed(() => {
   return currentMonthYear.value;
 });
 const currentMonthMonth = computed(() => {
-  return new Date().getMonth();
+  return data.currentMonth;
 });
 const currentMonthYear = computed(() => {
-  return new Date().getFullYear();
+  return data.currentYear
 });
 const nextMonthMonth = computed(() => {
   if (currentMonthMonth.value === 11) {
@@ -141,27 +159,34 @@ setupNavHeadeer();
         </h1>
       </div>
     </div>
-
+    <div class="flex justify-center">
+      <div @click="previousMonth" class="rounded-3xl text-sm border border-2 px-4 mx-2 py-2 hover:bg-pink-600 cursor-pointer hover:text-white border-pink-300 text-black">
+        &lt;
+      </div>
+      <div @click="resetMonths" class="rounded-3xl text-sm border border-2 px-4 mx-2 py-2 hover:bg-pink-600 cursor-pointer hover:text-white border-pink-300 text-black">
+        This Month
+      </div>
+      <div @click="nextMonth" class="rounded-3xl text-sm border border-2 px-4 mx-2 py-2 hover:bg-pink-600 cursor-pointer hover:text-white border-pink-300 text-black">
+        >
+      </div>
+    </div>
     <div class="container px-3 mx-auto">
       <!--Left Col-->
       <div class="w-full md:text-left">
-        <div class="md:grid md:grid-cols-3 md:gap-10">
+        <div class="md:grid md:grid-cols-3 md:gap-10 my-5">
           <div>
-            <h2 class="text-center text-xl my-8">Last Month</h2>
             <CalendarView
               :month="lastMonthMonth"
               :year="lastMonthYear"
             ></CalendarView>
           </div>
           <div>
-            <h2 class="text-center text-xl my-8">This Month</h2>
             <CalendarView
               :month="currentMonthMonth"
               :year="currentMonthYear"
             ></CalendarView>
           </div>
           <div>
-            <h2 class="text-center text-xl my-8">Next Month</h2>
             <CalendarView
               :month="nextMonthMonth"
               :year="nextMonthYear"
