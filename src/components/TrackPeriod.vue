@@ -135,7 +135,7 @@
                     <label>
                       Enter your {{ !data.one_day ? "average" : "" }} flow level
                       <select class="mt-2 rounded-3xl w-full" v-model="data.flow">
-                        <option :value="1">Spotting Only</option>
+                        <option :value="1">Spotting</option>
                         <option :value="2">Light</option>
                         <option :value="3">Medium</option>
                         <option :value="2">Heavy</option>

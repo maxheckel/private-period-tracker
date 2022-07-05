@@ -28,13 +28,11 @@
       v-bind:key="index"
     >
       <div
-        :class="
-          index === +today
-            ? {
-                'bg-blue-400 border-pink-300 border-2 rounded-full text-white  font-bold text-gray-700 rounded-full flex items-center justify-center font-mono': true,
-              }
-            : {
-                'bg-pink-300 rounded-full  font-bold text-gray-700 rounded-full flex items-center justify-center font-mono': true,
+        :class="{
+                'rounded-full  font-bold text-gray-700 rounded-full flex items-center justify-center font-mono': true,
+                'bg-blue-400 border-pink-300 border border-2': index === +today,
+                'bg-pink-300': index !== +today,
+                'border border-2 border-gray-500': past[index].period_ended
               }
         "
         style="width: 30px; height: 30px"
@@ -137,6 +135,7 @@ const future = computed(() => {
   let nextStart = props.nextStart;
   const averageDays = props.averageDays;
   if (!props.nextStart || !props.averageDays) {
+
     return futureDays;
   }
   nextStart = new Date(nextStart.getTime());

@@ -103,11 +103,11 @@ export const days = reactive<Days>({
     this.decryptedDays.every((check) => {
       // if it's the same day, remove the old day and replace it with the new
       if (
-        day.date.getDate() == check.date.getDay() &&
+        day.date.getDate() == check.date.getDate() &&
         day.date.getMonth() == check.date.getMonth() &&
         day.date.getFullYear() == check.date.getFullYear()
       ) {
-        this.removeDay(day);
+        this.removeDay(check);
         return false;
       }
       return true;

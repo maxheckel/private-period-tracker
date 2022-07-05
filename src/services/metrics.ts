@@ -4,6 +4,7 @@ import { birthControl } from "@/store/birthcontrol";
 
 export function isOnPeriod(): boolean {
   const lastDay = getLastDay();
+  console.log(lastDay);
   if (lastDay){
     return !lastDay.period_ended;
   }
