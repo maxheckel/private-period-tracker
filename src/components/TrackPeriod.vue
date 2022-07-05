@@ -244,7 +244,7 @@ const save = () => {
     day.flow = data.flow;
     day.on_period = true;
     day.period_ended = data.ended;
-
+    day.notes = "";
     days.addDay(day);
   }
   if (!data.one_day) {
@@ -259,6 +259,7 @@ const save = () => {
       day.flow = data.flow;
       day.on_period = true;
       day.period_ended = false;
+      day.notes = "";
       if (x == dayCount && data.ended) {
         day.period_ended = true;
       }

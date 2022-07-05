@@ -4,7 +4,7 @@ import { birthControl } from "@/store/birthcontrol";
 
 export function isOnPeriod(): boolean {
   const lastDay = getLastDay();
-  console.log(lastDay);
+
   if (lastDay){
     return !lastDay.period_ended;
   }
@@ -25,7 +25,7 @@ export function lastPeriodEndDate(): Date|null{
   const daysToConsider = getDaysToConsider();
   let startDate = null;
   for (let x = 0; x < daysToConsider.length; x++) {
-    if (daysToConsider[x].period_ended && x != daysToConsider.length - 1) {
+    if (daysToConsider[x].period_ended) {
       startDate = daysToConsider[x].date;
     }
   }
@@ -49,6 +49,7 @@ export function estimatedStartDate(): Date|null{
   for(let x = 0; x < averageTimeBetween(); x++){
     lastEnd.setDate(lastEnd.getDate() + 1);
   }
+
   return lastEnd;
 }
 
@@ -85,23 +86,17 @@ export function averageTimeBetween(): number {
       total += diffBetweenDays(endDate, nextStart);
     }
   }
-  return total / numberOfPeriods();
+
+  // Subtract one because we are averaging on the time between periods not number of periods themselves
+  return total / (numberOfPeriods()-1);
 }
 
 export function averageLength(): number {
   const daysToConsider = getDaysToConsider();
-  let total = 0;
   if (daysToConsider.length === 0){
     return 0;
   }
-  let currentStart = daysToConsider[0].date;
-  for (let x = 0; x < daysToConsider.length; x++) {
-    if (daysToConsider[x].period_ended && x != daysToConsider.length - 1) {
-      total += diffBetweenDays(currentStart, daysToConsider[x].date)
-      currentStart = daysToConsider[x].date;
-    }
-  }
-  return total / numberOfPeriods();
+  return daysToConsider.filter((day) => day.on_period).length / numberOfPeriods();
 }
 
 export function diffBetweenDays(earlier: Date, later: Date): number {
