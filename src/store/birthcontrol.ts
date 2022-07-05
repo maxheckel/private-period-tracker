@@ -98,7 +98,7 @@ export const birthControl = reactive<BirthControlTracker>({
     return decrypted;
   },
   getCurrentBirthControl(): BirthControlDecrypted | undefined {
-    return this.getBirthControls().find((bc) => {
+    return this.birthControlsDecrypted.find((bc) => {
       return bc.active;
     });
   },

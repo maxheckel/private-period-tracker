@@ -91,6 +91,7 @@ import type { DecryptedDay } from "@/store/days";
 import ViewDay from "@/components/ViewDay.vue";
 import { add } from "@/store/add";
 import { computed, reactive } from "vue";
+import {averageLength, estimatedStartDate} from "@/services/metrics";
 const data = reactive({
   days: days.decryptedDays,
   currentDay: {} as DecryptedDay,
@@ -111,7 +112,9 @@ const data = reactive({
   ],
 });
 
-const props = defineProps(["month", "year", "nextStart", "averageDays"]);
+const props = defineProps(["month", "year"]);
+const averageDaysOnPeriod = computed(averageLength)
+const nextStartDate = computed(estimatedStartDate);
 const past = computed(() => {
   const daysForThisMonth: any = {};
   if (days.days.length === 0 && days.loaded) {
@@ -132,9 +135,9 @@ const past = computed(() => {
 });
 const future = computed(() => {
   const futureDays: any = {};
-  let nextStart = props.nextStart;
-  const averageDays = props.averageDays;
-  if (!props.nextStart || !props.averageDays) {
+  let nextStart = nextStartDate.value;
+  const averageDays = averageDaysOnPeriod.value;
+  if (!nextStart || !averageDays) {
 
     return futureDays;
   }

@@ -1,82 +1,5 @@
-<template>
-  <div class="relative w-full">
-    <div class="mt-24"></div>
-    <div class="mx-auto container md:grid gap-0 md:grid-cols-3 items-center justify-center">
-
-      <div class="my-4 block justify-center flex">
-        <div
-            class="cursor-pointer text-2xl mx-auto relative gradient inline-block p-6 rounded-full text-white font-bold drop-shadow-lg mx-auto relative"
-            @click="showAdd()"
-        >
-          Log My Period
-        </div>
-      </div>
-      <div class="block text-center justify-center flex md:col-span-2 align-middle justify-center">
-        <h1 class="text-2xl d">
-          <span
-            v-if="data.onPeriod && data.currentEstimatedPeriodEndDate"
-            class=""
-          >
-            You're currently on your period, it should end around
-            <span class="text-pink-600 font-bold">{{ data.currentEstimatedPeriodEndDate.toDateString() }}</span>
-
-          </span>
-          <span v-if="!data.onPeriod && data.nextPeriodStartDate">
-            Your next period start date is estimated to be
-            <span class="text-pink-600 font-bold">{{ data.nextPeriodStartDate.toDateString() }}</span>
-
-          </span>
-          <span
-            v-if="
-              !data.nextPeriodStartDate &&
-              !data.currentEstimatedPeriodEndDate
-            "
-          >
-            Not enough data to estimate next period
-          </span>
-        </h1>
-      </div>
-    </div>
-
-    <div class="container px-3 mx-auto">
-      <!--Left Col-->
-      <div class="w-full md:text-left">
-        <div class="md:grid md:grid-cols-3 md:gap-10">
-          <div>
-            <h2 class="text-center text-xl my-8">Last Month</h2>
-            <CalendarView
-              :month="lastMonthMonth"
-              :year="lastMonthYear"
-              :next-start="data.nextPeriodStartDate"
-              :average-days="data.averageDays"
-            ></CalendarView>
-          </div>
-          <div>
-            <h2 class="text-center text-xl my-8">This Month</h2>
-            <CalendarView
-              :month="currentMonthMonth"
-              :year="currentMonthYear"
-              :next-start="data.nextPeriodStartDate"
-              :average-days="data.averageDays"
-            ></CalendarView>
-          </div>
-          <div>
-            <h2 class="text-center text-xl my-8">Next Month</h2>
-            <CalendarView
-              :month="nextMonthMonth"
-              :year="nextMonthYear"
-              :next-start="data.nextPeriodStartDate"
-              :average-days="data.averageDays"
-            ></CalendarView>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
 
 <script setup lang="ts">
-import type { DecryptedDay } from "@/store/days";
 import { days } from "@/store/days";
 import {
   averageLength,
@@ -86,19 +9,18 @@ import {
 } from "@/services/metrics";
 import CalendarView from "@/components/CalendarView.vue";
 import { computed, reactive } from "vue";
-import {add} from "@/store/add";
+import { add } from "@/store/add";
 
 const data = reactive({
   days: days.decryptedDays,
-  onPeriod: isOnPeriod(),
-  currentEstimatedPeriodEndDate: estimatedEndDate(),
-  nextPeriodStartDate: estimatedStartDate(),
-  averageDays: averageLength()
 });
-
+const onPeriod = computed(isOnPeriod);
+const nextPeriodStartDate = computed(estimatedStartDate);
+const currentEstimatedPeriodEndDate = computed(estimatedEndDate);
+console.log(onPeriod.value, currentEstimatedPeriodEndDate.value);
 const showAdd = () => {
-  add.show(null)
-}
+  add.show(null);
+};
 
 const lastMonthMonth = computed(() => {
   if (currentMonthMonth.value === 0) {
@@ -177,5 +99,78 @@ function setupNavHeadeer() {
 
 setupNavHeadeer();
 </script>
+
+<template>
+  <div class="relative w-full">
+    <div class="mt-24"></div>
+    <div
+      class="mx-auto container md:grid gap-0 md:grid-cols-3 items-center justify-center"
+    >
+      <div class="my-4 block justify-center flex">
+        <div
+          class="cursor-pointer text-2xl mx-auto relative gradient inline-block p-6 rounded-full text-white font-bold drop-shadow-lg mx-auto relative"
+          @click="showAdd()"
+        >
+          Log My Period
+        </div>
+      </div>
+      <div
+        class="block text-center justify-center flex md:col-span-2 align-middle justify-center"
+      >
+        <h1 class="text-2xl d">
+          <span v-if="isOnPeriod() && estimatedEndDate()">
+            You're currently on your period, it should end around
+            <span class="text-pink-600 font-bold">{{
+                estimatedEndDate()?.toDateString()
+            }}</span>
+          </span>
+          <span v-if="!isOnPeriod() && estimatedStartDate()">
+            Your next period start date is estimated to be
+            <span class="text-pink-600 font-bold">{{
+                estimatedStartDate()?.toDateString()
+            }}</span>
+            it will last around {{averageLength()}} days
+          </span>
+          <span
+            v-if="
+              !estimatedEndDate() && !estimatedStartDate()
+            "
+          >
+            Click the "Log my period" button to start logging your period
+          </span>
+        </h1>
+      </div>
+    </div>
+
+    <div class="container px-3 mx-auto">
+      <!--Left Col-->
+      <div class="w-full md:text-left">
+        <div class="md:grid md:grid-cols-3 md:gap-10">
+          <div>
+            <h2 class="text-center text-xl my-8">Last Month</h2>
+            <CalendarView
+              :month="lastMonthMonth"
+              :year="lastMonthYear"
+            ></CalendarView>
+          </div>
+          <div>
+            <h2 class="text-center text-xl my-8">This Month</h2>
+            <CalendarView
+              :month="currentMonthMonth"
+              :year="currentMonthYear"
+            ></CalendarView>
+          </div>
+          <div>
+            <h2 class="text-center text-xl my-8">Next Month</h2>
+            <CalendarView
+              :month="nextMonthMonth"
+              :year="nextMonthYear"
+            ></CalendarView>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
 
 <style scoped></style>

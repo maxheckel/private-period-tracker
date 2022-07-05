@@ -1,11 +1,11 @@
-import { days } from "@/store/days";
 import type {DecryptedDay} from "@/store/days";
-import { birthControl } from "@/store/birthcontrol";
+import {days} from "@/store/days";
+import {birthControl} from "@/store/birthcontrol";
 
 export function isOnPeriod(): boolean {
+
   try{
     const lastDay = getLastDay();
-    console.log(lastDay)
     if (lastDay){
       return !lastDay.period_ended;
     }
@@ -17,12 +17,9 @@ export function isOnPeriod(): boolean {
 }
 
 export function getLastDay(): DecryptedDay|null {
-
-  const sorted =  days.getDays().sort(function (a, b) {
-    return b.date.getTime() - a.date.getTime();
-  });
+  const sorted = getDaysToConsider();
   if (sorted) {
-    return sorted[0];
+    return sorted[sorted.length-1];
   }
   return null;
 }
@@ -116,30 +113,30 @@ export function diffBetweenDays(earlier: Date, later: Date): number {
   );
 }
 
-function numberOfPeriods(): number {
-  let count = getDaysToConsider().filter(function (day) {
+export function numberOfPeriods(): number {
+  const daysToConsider = getDaysToConsider();
+  let count = daysToConsider.filter(function (day) {
     return day.period_ended;
   }).length;
-  if (!getDaysToConsider().reverse()[0].period_ended){
+  if (!daysToConsider[daysToConsider.length-1].period_ended){
     count++;
   }
   return count;
 }
 
-function getDaysToConsider(): DecryptedDay[] {
+export function getDaysToConsider(): DecryptedDay[] {
   days.load();
-  let sorted = days.decryptedDays.sort(function (a, b) {
+  let sorted =  days.decryptedDays.sort(function (a, b) {
     return a.date.getTime() - b.date.getTime();
   });
-
   // If they're currently on birth control we need to only count days when
   // they're on their current birth control.
   const currentBirthControl = birthControl.getCurrentBirthControl();
   if (currentBirthControl) {
     sorted = sorted.filter((day) => {
       if (
-        currentBirthControl.start_date !== undefined &&
-        day.date.getTime() < currentBirthControl.start_date.getTime()
+          currentBirthControl.start_date !== undefined &&
+          day.date.getTime() < currentBirthControl.start_date.getTime()
       ) {
         return false;
       }

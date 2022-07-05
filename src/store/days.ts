@@ -97,9 +97,10 @@ export const days = reactive<Days>({
     this.loaded = true;
   },
   addDay(day: DecryptedDay) {
-    if (!day.uuid){
+    if (!day.uuid) {
       day.uuid = crypto.randomUUID();
     }
+
     this.decryptedDays.every((check) => {
       // if it's the same day, remove the old day and replace it with the new
       if (
