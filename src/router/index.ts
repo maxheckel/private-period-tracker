@@ -48,6 +48,11 @@ const router = createRouter({
       name: "login",
       component: () => import("../views/LogIn.vue"),
     },
+    {
+      path: "/changelog",
+      name: "changelog",
+      component: () => import("../views/ChangeLog.vue"),
+    },
   ],
 });
 

@@ -29,14 +29,12 @@ const showModal = function (date: Date | null = null) {
         to="dashboard"
       >
         <button
-            @click="showModal()"
+          @click="showModal()"
           id="navAction"
           class="mx-auto relative lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full mt-4 lg:mt-0 py-4 px-8 shadow opacity-75 focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
         >
-          <span v-if="data.onPeriod" > Log My Period </span>
-          <span v-if="!data.onPeriod">
-            My Period Has Started
-          </span>
+          <span v-if="data.onPeriod"> Log My Period </span>
+          <span v-if="!data.onPeriod"> My Period Has Started </span>
         </button>
       </div>
       <div
@@ -113,7 +111,7 @@ const showModal = function (date: Date | null = null) {
         <h1
           class="w-full my-2 text-5xl font-bold leading-tight text-center text-gray-800"
         >
-          Privacy Guaranteed
+          Privacy By Design
         </h1>
         <div class="w-full mb-4">
           <div
@@ -129,7 +127,7 @@ const showModal = function (date: Date | null = null) {
               All data you enter is stored exclusively on the device where you
               enter it. There is no "back-end" service connected to this site,
               the only thing the server delivers is the HTML, Javascript and CSS
-              required to run the sites.
+              required to run the site.
               <br />
               <br />
             </p>
@@ -155,9 +153,12 @@ const showModal = function (date: Date | null = null) {
                   target="_blank"
                   >open source</a
                 >
-                and welcome to be reviewed by anyone. Zero trackers, including
-                google analytics, ad works, or any other pixels or cookies are
-                used to track you.
+                and welcome to be reviewed by anyone. Expect more updates to
+                come in the future, if you find any issues or have feature requests please add them to the
+                <a class="text-pink-500 underline" href="https://github.com/maxheckel/private-period-tracker/issues" target="_blank"> github issues page!</a>
+                <br /><br />
+                Zero trackers, including analytics, ads, or any other pixels or
+                cookies are used to track you.
                 <br />
                 <br />
               </p>
@@ -218,9 +219,9 @@ const showModal = function (date: Date | null = null) {
                 encrypts and then saves it in your browser's storage using a
                 tool called
                 <a
-                  href="https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API"
+                  href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage"
                   class="text-pink-500 underline"
-                  >IndexedDB</a
+                  >Local Storage</a
                 >.
               </p>
             </div>
@@ -239,9 +240,10 @@ const showModal = function (date: Date | null = null) {
               </div>
               <p class="text-gray-800 text-base px-6 mb-5">
                 Because of the nature of the storage your data is only available
-                on a single device. However, you can download all your encrypted
-                data and upload it to another device if necessary. The data does
-                not sync across devices.
+                on a single device, it does not sync across devices
+                automatically. However, eventually you will be able to download
+                all your encrypted data and upload it to another device if
+                necessary.
               </p>
             </div>
           </div>

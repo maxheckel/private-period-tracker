@@ -44,3 +44,7 @@ npm run build
 ```sh
 npm run lint
 ```
+
+# Contributing
+
+All are welcome to contribute to this project.  Simply open a pull request and it will be reviewed and approved as soon as possible depending on current PR volume/size.
