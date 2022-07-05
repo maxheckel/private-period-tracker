@@ -61,11 +61,12 @@
                 <h3
                   class="text-lg leading-6 pt-2 text-gray-900 font-bold"
                   id="modal-title"
+                  v-if="day !== undefined"
                 >
                   {{ day.date.toDateString() }}
                 </h3>
                 <div class="my-4 w-full">
-                  <div v-if="day.flow">
+                  <div v-if="day !== undefined && day.flow">
                     <b>Flow: </b> {{ flowTypes[day.flow] }}
                   </div>
                 </div>
@@ -97,7 +98,7 @@
 <script setup lang="ts">
 import type { DecryptedDay } from "@/store/days";
 import { days } from "@/store/days";
-const flowTypes = {
+const flowTypes:any = {
   1: "Spotting",
   2: "Light",
   3: "Medium",
@@ -113,7 +114,6 @@ const emits = defineEmits(["hide"]);
 const deleteDay = () => {
   if (props.day) {
     days.removeDay(props.day);
-    console.log('here hide')
     emits('hide', true);
   }
 };

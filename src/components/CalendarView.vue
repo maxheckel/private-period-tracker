@@ -1,11 +1,11 @@
 <template>
   <ViewDay
-    :day="currentDay"
-    :showing="showingDay"
-    @hide="showingDay = false"
+    :day="data.currentDay"
+    :showing="data.showingDay"
+    @hide="hideDay"
   ></ViewDay>
   <div class="text-center text-gray-400">
-    {{ months[this.month] }} {{ this.year }}
+    {{ data.months[props.month] }} {{ props.year }}
   </div>
   <div class="w-full grid grid-cols-7 text-sm">
     <div class="text-center mb-2 text-gray-400">S</div>
@@ -18,8 +18,9 @@
     <div
       class="p-4 bg-gray-200 border-t border-l border-gray-100 text-center"
       v-for="index in firstDayBuffer"
+      v-bind:key="index"
     >
-      {{ numberOfDaysLastMonth - index }}
+      {{ numberOfDaysLastMonth - (firstDayBuffer - index) }}
     </div>
     <div
       class="p-4 border-gray-100 border border-t border-l text-center"
@@ -75,112 +76,120 @@
     <div
       class="p-4 bg-gray-200 border-t border-l border-gray-100 text-center"
       v-for="index in endBuffer"
+      v-bind:key="index"
     >
       {{ index }}
     </div>
   </div>
 </template>
-
 <script lang="ts">
+export default {
+  name: "CalendarView",
+};
+</script>
+<script setup lang="ts">
 import { days } from "@/store/days";
 import type { DecryptedDay } from "@/store/days";
 import ViewDay from "@/components/ViewDay.vue";
 import { add } from "@/store/add";
+import { computed, reactive } from "vue";
+const data = reactive({
+  days: days.decryptedDays,
+  currentDay: {} as DecryptedDay,
+  showingDay: false,
+  months: [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ],
+});
 
-export default {
-  name: "CalendarView",
-  components: { ViewDay },
-  data() {
-    return {
-      currentDay: undefined,
-      showingDay: false,
-      months: [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
-      ],
-    };
-  },
-  props: ["month", "year", "nextStart", "averageDays"],
-  computed: {
-    past() {
-      const daysForThisMonth = {};
-      if (days.days.length === 0 && days.loaded){
-        return daysForThisMonth;
-      }
-      // convert the days for this month into a map so they're easier to lookup
-      days.decryptedDays
-        .filter((day) => {
-          return (
-            day.date.getMonth() === this.month &&
-            day.date.getFullYear() === this.year
-          );
-        })
-        .forEach((day) => {
-          daysForThisMonth[day.date.getDate()] = day;
-        });
-      return daysForThisMonth;
-    },
-    future() {
-      const futureDays = {};
-      let nextStart = this.nextStart;
-      const averageDays = this.averageDays;
-      if (!this.nextStart || !this.averageDays) {
-        return futureDays;
-      }
-      nextStart = new Date(nextStart.getTime());
-      for (let x = 0; x < averageDays; x++) {
-        if (nextStart.getMonth() === this.month && nextStart.getTime() > new Date().getTime()) {
-          futureDays[nextStart.getDate()] = true;
-        }
-        nextStart.setDate(nextStart.getDate() + 1);
-      }
-      return futureDays;
-    },
-    today() {
-      const today = new Date();
-      if (today.getMonth() === this.month) {
-        return today.getDate();
-      }
-      return -1;
-    },
-    numberOfDays() {
-      return new Date(this.year, +this.month + 1, 0).getDate();
-    },
-    firstDayBuffer() {
-      const firstDay = new Date(this.year, this.month, 1);
-      return firstDay.getDay();
-    },
-    numberOfDaysLastMonth() {
-      if (this.month === 0) {
-        return new Date(this.year, 11, 0).getDate();
-      }
-      return new Date(this.year, this.month - 1, 0).getDate();
-    },
-    endBuffer() {
-      const numDaysShown = this.numberOfDays + this.firstDayBuffer;
+const props = defineProps(["month", "year", "nextStart", "averageDays"]);
+const past = computed(() => {
+  const daysForThisMonth: any = {};
+  if (days.days.length === 0 && days.loaded) {
+    return daysForThisMonth;
+  }
+  // convert the days for this month into a map so they're easier to lookup
+  days.decryptedDays
+    .filter((day) => {
+      return (
+        day.date.getMonth() === props.month &&
+        day.date.getFullYear() === props.year
+      );
+    })
+    .forEach((day) => {
+      daysForThisMonth[day.date.getDate()] = day;
+    });
+  return daysForThisMonth;
+});
+const future = computed(() => {
+  const futureDays: any = {};
+  let nextStart = props.nextStart;
+  const averageDays = props.averageDays;
+  if (!props.nextStart || !props.averageDays) {
+    return futureDays;
+  }
+  nextStart = new Date(nextStart.getTime());
+  for (let x = 0; x < averageDays; x++) {
+    if (
+      nextStart.getMonth() === props.month &&
+      nextStart.getTime() > new Date().getTime()
+    ) {
+      futureDays[nextStart.getDate()] = true;
+    }
+    nextStart.setDate(nextStart.getDate() + 1);
+  }
+  return futureDays;
+});
 
-      return 7 - (numDaysShown % 7);
-    },
-  },
-  methods: {
-    showDay(day: DecryptedDay) {
-      this.currentDay = day;
-      this.showingDay = true;
-    },
-    addDay(index) {
-      add.show(new Date(this.year, this.month, index));
-    },
-  },
+const today = computed(() => {
+  const today = new Date();
+  if (today.getMonth() === props.month) {
+    return today.getDate();
+  }
+  return -1;
+});
+
+const numberOfDays = computed(() => {
+  return new Date(props.year, +props.month + 1, 0).getDate();
+});
+
+const firstDayBuffer = computed(() => {
+  const firstDay = new Date(props.year, props.month, 1);
+  return firstDay.getDay();
+});
+const numberOfDaysLastMonth = computed(() => {
+  if (props.month === 0) {
+    return new Date(props.year, 11, 0).getDate();
+  }
+  return new Date(props.year, props.month - 1, 0).getDate();
+});
+const endBuffer = computed(() => {
+  const numDaysShown = numberOfDays.value + firstDayBuffer.value;
+
+  return 7 - (numDaysShown % 7);
+});
+const hideDay = () => {
+  data.showingDay = false;
+};
+
+const showDay = (day: DecryptedDay) => {
+  data.currentDay = day;
+  data.showingDay = true;
+};
+
+const addDay = (index:number) => {
+  add.show(new Date(props.year, props.month, index));
 };
 </script>
 

@@ -28,7 +28,6 @@
           </span>
           <span
             v-if="
-              !data.onPeriod &&
               !data.nextPeriodStartDate &&
               !data.currentEstimatedPeriodEndDate
             "
@@ -90,6 +89,7 @@ import { computed, reactive } from "vue";
 import {add} from "@/store/add";
 
 const data = reactive({
+  days: days.decryptedDays,
   onPeriod: isOnPeriod(),
   currentEstimatedPeriodEndDate: estimatedEndDate(),
   nextPeriodStartDate: estimatedStartDate(),

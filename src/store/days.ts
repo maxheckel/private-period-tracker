@@ -89,13 +89,17 @@ export const days = reactive<Days>({
     daysData.forEach((day: EncryptedDay) => {
       this.days.push(day);
     });
+    const decrypted = [] as DecryptedDay[];
+    this.days.forEach(function (day) {
+      decrypted.push(decryptDay(day));
+    });
+    this.decryptedDays = decrypted;
     this.loaded = true;
   },
   addDay(day: DecryptedDay) {
     if (!day.uuid){
       day.uuid = crypto.randomUUID();
     }
-    let uuidToRemove = ""
     this.decryptedDays.every((check) => {
       // if it's the same day, remove the old day and replace it with the new
       if (
@@ -135,7 +139,6 @@ export const days = reactive<Days>({
     this.decryptedDays = this.decryptedDays.filter(function (check) {
       return check.uuid != day.uuid;
     });
-    console.log(this.decryptedDays);
     this.store();
   },
   getDays(): DecryptedDay[] {

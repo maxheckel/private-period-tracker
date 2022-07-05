@@ -3,17 +3,21 @@ import type {DecryptedDay} from "@/store/days";
 import { birthControl } from "@/store/birthcontrol";
 
 export function isOnPeriod(): boolean {
-  if (days.getDays().length == 0) {
-    return false;
-  }
   const lastDay = getLastDay();
-  return !lastDay.period_ended;
+  if (lastDay){
+    return !lastDay.period_ended;
+  }
+  return false;
 }
 
-export function getLastDay() {
-  return days.getDays().sort(function (a, b) {
+export function getLastDay(): DecryptedDay|null {
+  const sorted =  days.getDays().sort(function (a, b) {
     return b.date.getTime() - a.date.getTime();
-  })[0];
+  });
+  if (sorted) {
+    return sorted[0];
+  }
+  return null;
 }
 
 export function lastPeriodEndDate(): Date|null{
@@ -113,7 +117,8 @@ function numberOfPeriods(): number {
 }
 
 function getDaysToConsider(): DecryptedDay[] {
-  let sorted = days.getDays().sort(function (a, b) {
+  days.load();
+  let sorted = days.decryptedDays.sort(function (a, b) {
     return a.date.getTime() - b.date.getTime();
   });
 

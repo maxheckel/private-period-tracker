@@ -1,6 +1,3 @@
-<script setup lang="ts">
-import { add } from "@/store/add";
-</script>
 <template>
   <div
     v-if="add.getShowing()"
@@ -68,16 +65,16 @@ import { add } from "@/store/add";
                   Add Period Data
                 </h3>
                 <div class="my-4 w-full">
-                  <div class="text-red-500 mb-4" v-if="error">{{ error }}</div>
+                  <div class="text-red-500 mb-4" v-if="data.error">{{ data.error }}</div>
                   <label>
                     Are You logging one day or a span of days?
-                    <select class="mt-2 rounded-3xl w-full" v-model="one_day">
+                    <select class="mt-2 rounded-3xl w-full" v-model="data.one_day">
                       <option :value="true">One Day</option>
                       <option :value="false">A Span</option>
                     </select>
                   </label>
 
-                  <div class="mt-8" v-if="one_day">
+                  <div class="mt-8" v-if="data.one_day">
                     <label>
                       Which day are you logging?
                       <input
@@ -85,21 +82,20 @@ import { add } from "@/store/add";
                         class="mt-4 rounded-md text-xl shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block mt-1 w-full"
                         type="date"
                         :value="add.date.toISOString().slice(0, 10)"
-
                         required
                       />
                     </label>
                   </div>
-                  <div class="mt-8" v-if="one_day && currently_on_period">
+                  <div class="mt-8" v-if="data.one_day && data.currently_on_period">
                     <label>
                       Did your period end on {{ startDateReadable }}?
-                      <select class="mt-2 rounded-3xl w-full" v-model="ended">
+                      <select class="mt-2 rounded-3xl w-full" v-model="data.ended">
                         <option :value="true">Yes</option>
                         <option :value="false">No</option>
                       </select>
                     </label>
                   </div>
-                  <div class="mt-8" v-if="!one_day">
+                  <div class="mt-8" v-if="!data.one_day">
                     <div class="grid grid-cols-2 gap-4">
                       <label>
                         Start
@@ -115,30 +111,30 @@ import { add } from "@/store/add";
                       <label>
                         End
                         <input
-                          @change="error = null"
+                          @change="data.error = ''"
                           class="mt-4 rounded-md text-xl shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block mt-1 w-full"
                           type="date"
                           required
-                          v-model="end_date"
+                          v-model="data.end_date"
                         />
                       </label>
                     </div>
                   </div>
 
-                  <div v-if="!one_day" class="mt-8">
+                  <div v-if="!data.one_day" class="mt-8">
                     <label>
                       Did your period end on {{ endDateReadable }}?
-                      <select class="mt-2 rounded-3xl w-full" v-model="ended">
+                      <select class="mt-2 rounded-3xl w-full" v-model="data.ended">
                         <option :value="true">Yes</option>
                         <option :value="false">No</option>
                       </select>
                     </label>
                   </div>
 
-                  <div class="mt-8" v-if="!ended">
+                  <div class="mt-8" v-if="!data.ended">
                     <label>
-                      Enter your {{ !one_day ? "average" : "" }} flow level
-                      <select class="mt-2 rounded-3xl w-full" v-model="flow">
+                      Enter your {{ !data.one_day ? "average" : "" }} flow level
+                      <select class="mt-2 rounded-3xl w-full" v-model="data.flow">
                         <option :value="1">Spotting Only</option>
                         <option :value="2">Light</option>
                         <option :value="3">Medium</option>
@@ -173,108 +169,106 @@ import { add } from "@/store/add";
 </template>
 
 <script lang="ts">
+export default {
+  name: "TrackPeriod",
+};
+</script>
+<script setup lang="ts">
 import { diffBetweenDays, isOnPeriod } from "@/services/metrics";
 import type { DecryptedDay } from "@/store/days";
 import { days } from "@/store/days";
 import router from "@/router";
 import { add } from "@/store/add";
+import { computed, reactive } from "vue";
 
-export default {
-  name: "TrackPeriod",
-  data() {
-    return {
-      one_day: true,
-      start_date: add.getDate().toISOString().slice(0, 10),
-      end_date: new Date().toISOString().slice(0, 10),
-      currently_on_period: isOnPeriod(),
-      flow: 1,
-      ended: false,
-      error: "",
-      on_period: true,
-    };
-  },
+const data = reactive({
+  one_day: true,
+  start_date: add.getDate().toISOString().slice(0, 10),
+  end_date: new Date().toISOString().slice(0, 10),
+  currently_on_period: isOnPeriod(),
+  flow: 1,
+  ended: false,
+  error: "",
+  on_period: true,
+});
 
-  methods: {
-    setStartDate(e) {
-      const [y, m, d] = e.target.value.split("-");
-      const dateToAdd = new Date();
-      dateToAdd.setDate(+d);
-      dateToAdd.setMonth(+m - 1);
-      dateToAdd.setFullYear(+y);
-      dateToAdd.setDate(dateToAdd.getDate());
-      console.log(dateToAdd);
-      add.show(dateToAdd);
-    },
-    save() {
-      if (
-        !this.one_day &&
-        this.startDateObject.getTime() > this.endDateObject.getTime()
-      ) {
-        this.error = "Start date must come before end date";
-        return;
-      }
-      if (
-        this.startDateObject.getTime() > new Date().getTime() &&
-        this.startDateObject.getDate() > new Date().getDate()
-      ) {
-        this.error = "Start date cannot be in the future";
-        return;
-      }
-      if (this.one_day) {
-        const day = {} as DecryptedDay;
-        const start = new Date(this.startDateObject.getTime());
-        if (this.ended) {
-          start.setDate(start.getDate() - 1);
-        }
-        day.date = start;
-        day.flow = this.flow;
-        day.on_period = true;
-        day.period_ended = this.ended;
+const startDateReadable = computed(() => {
+  return startDateObject.value.toDateString();
+});
+const startDateObject = computed(() => {
+  return add.getDate();
+});
+const endDateObject = computed(() => {
+  const [y, m, d] = data.end_date.split("-");
+  const end = new Date();
+  end.setDate(+d);
+  end.setMonth(+m - 1);
+  end.setFullYear(+y);
+  return end;
+});
+const endDateReadable = computed(() => {
+  return endDateObject.value.toDateString();
+});
 
-        days.addDay(day);
+const setStartDate = (e: any) => {
+  const [y, m, d] = e.target.value.split("-");
+  const dateToAdd = new Date();
+  dateToAdd.setDate(+d);
+  dateToAdd.setMonth(+m - 1);
+  dateToAdd.setFullYear(+y);
+  dateToAdd.setDate(dateToAdd.getDate());
+  add.show(dateToAdd);
+};
+const save = () => {
+  if (
+    !data.one_day &&
+    startDateObject.value.getTime() > endDateObject.value.getTime()
+  ) {
+    data.error = "Start date must come before end date";
+    return;
+  }
+  if (
+    startDateObject.value.getTime() > new Date().getTime() &&
+    startDateObject.value.getDate() > new Date().getDate()
+  ) {
+    data.error = "Start date cannot be in the future";
+    return;
+  }
+  if (data.one_day) {
+    const day = {} as DecryptedDay;
+    const start = new Date(startDateObject.value.getTime());
+    if (data.ended) {
+      start.setDate(start.getDate() - 1);
+    }
+    day.date = start;
+    day.flow = data.flow;
+    day.on_period = true;
+    day.period_ended = data.ended;
+
+    days.addDay(day);
+  }
+  if (!data.one_day) {
+    const startDate = new Date(startDateObject.value.getTime());
+    const dayCount = diffBetweenDays(
+      startDateObject.value,
+      endDateObject.value
+    );
+    for (let x = 0; x < dayCount + 1; x++) {
+      const day = {} as DecryptedDay;
+      day.date = new Date(startDate.getTime());
+      day.flow = data.flow;
+      day.on_period = true;
+      day.period_ended = false;
+      if (x == dayCount && data.ended) {
+        day.period_ended = true;
       }
-      if (!this.one_day) {
-        const startDate = new Date(this.startDateObject.getTime());
-        const dayCount = diffBetweenDays(
-          this.startDateObject,
-          this.endDateObject
-        );
-        for (let x = 0; x < dayCount+1; x++) {
-          const day = {} as DecryptedDay;
-          day.date = startDate;
-          day.flow = this.flow;
-          day.on_period = true;
-          day.period_ended = false;
-          if (x == dayCount - 1 && this.ended){
-            day.period_ended = true;
-          }
-          days.addDay(day);
-          startDate.setDate(startDate.getDate() + 1);
-        }
-      }
-      add.hide();
-      router.push({ path: "/dashboard" });
-    },
-  },
-  computed: {
-    startDateReadable() {
-      return this.startDateObject.toDateString();
-    },
-    startDateObject() {
-     return add.getDate();
-    },
-    endDateObject() {
-      const [y, m, d] = this.end_date.split("-");
-      const end = new Date();
-      end.setDate(+d);
-      end.setMonth(+m - 1);
-      end.setFullYear(+y);
-      return end;
-    },
-    endDateReadable() {
-      return this.endDateObject.toDateString();
-    },
-  },
+      days.addDay(day);
+      startDate.setDate(startDate.getDate() + 1);
+    }
+  }
+
+  add.hide();
+  router.push({ path: "/dashboard" });
 };
 </script>
 
