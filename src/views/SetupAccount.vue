@@ -92,40 +92,43 @@ const data = reactive({
 
 const save = () => {
   // Add the days from their last period start date till the average end date
-  let [y, m, d] = data.lastPeriodStart.split("-");
-  const lastPeriodStart = new Date();
-  lastPeriodStart.setDate(+d);
-  lastPeriodStart.setMonth(+m - 1);
-  lastPeriodStart.setFullYear(+y);
-  for (let x = 0; x < data.length; x++) {
-    const newDay = {} as DecryptedDay;
-    newDay.date = new Date(lastPeriodStart.getTime());
-    newDay.on_period = true;
-    newDay.period_ended = false;
-    if (x == Math.ceil(data.length) - 1) {
-      newDay.period_ended = true;
+  if(data.lastPeriodStart){
+    const [y, m, d] = data.lastPeriodStart.split("-");
+    const lastPeriodStart = new Date();
+    lastPeriodStart.setDate(+d);
+    lastPeriodStart.setMonth(+m - 1);
+    lastPeriodStart.setFullYear(+y);
+    for (let x = 0; x < data.length; x++) {
+      const newDay = {} as DecryptedDay;
+      newDay.date = new Date(lastPeriodStart.getTime());
+      newDay.on_period = true;
+      newDay.period_ended = false;
+      if (x == Math.ceil(data.length) - 1) {
+        newDay.period_ended = true;
+      }
+      newDay.notes = "";
+      days.addDay(newDay);
+      lastPeriodStart.setDate(lastPeriodStart.getDate() + 1);
     }
-    newDay.notes = "";
-    days.addDay(newDay);
-    lastPeriodStart.setDate(lastPeriodStart.getDate() + 1);
   }
 
   if (data.onItNow){
 
     // Add the days from their current period start till today
-    [y, m, d] = data.currentPeriodStart.split("-");
+    const [y, m, d] = data.currentPeriodStart.split("-");
     const currentPeriodStart = new Date();
     currentPeriodStart.setDate(+d);
     currentPeriodStart.setMonth(+m - 1);
     currentPeriodStart.setFullYear(+y);
     const numDays = diffBetweenDays(currentPeriodStart, new Date());
+    console.log(numDays);
     for (let x = 0; x < Math.ceil(numDays)+1; x++) {
       const newDay = {} as DecryptedDay;
       newDay.date = new Date(currentPeriodStart.getTime());
       newDay.on_period = true;
       newDay.period_ended = false;
       newDay.notes = "";
-      // days.addDay(newDay);
+      days.addDay(newDay);
       currentPeriodStart.setDate(currentPeriodStart.getDate() + 1);
     }
 

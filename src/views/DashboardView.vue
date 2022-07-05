@@ -17,7 +17,7 @@
             v-if="data.onPeriod && data.currentEstimatedPeriodEndDate"
             class=""
           >
-            You're currently on your period, it should end on
+            You're currently on your period, it should end around
             <span class="text-pink-600 font-bold">{{ data.currentEstimatedPeriodEndDate.toDateString() }}</span>
 
           </span>
@@ -32,7 +32,7 @@
               !data.currentEstimatedPeriodEndDate
             "
           >
-            Click the button below to log your first period data.
+            Not enough data to estimate next period
           </span>
         </h1>
       </div>

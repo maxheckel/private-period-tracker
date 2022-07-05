@@ -56,6 +56,9 @@ export function estimatedStartDate(): Date|null{
     lastEnd.setDate(lastEnd.getDate() + 1);
   }
 
+  if (lastEnd.getTime() < new Date().getTime()){
+    return null;
+  }
   return lastEnd;
 }
 
@@ -68,6 +71,7 @@ export function estimatedEndDate(): Date|null {
   for(let x = 0; x < averageLength(); x++){
     currentStart.setDate(currentStart.getDate() + 1);
   }
+
   return currentStart;
 }
 
