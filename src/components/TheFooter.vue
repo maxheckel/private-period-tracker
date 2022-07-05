@@ -14,26 +14,34 @@
         <div class="flex-1">
           <p class="uppercase text-gray-500 md:mb-6">Links</p>
           <ul class="list-reset mb-6">
-            <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+            <router-link to="sign-up" class="mt-2 inline-block mr-2 md:block md:mr-0">
               <a
                   href="#"
                   class="no-underline hover:underline text-gray-800 hover:text-pink-500"
               >Sign Up</a
               >
-            </li>
-            <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+            </router-link>
+            <router-link to="login" class="mt-2 inline-block mr-2 md:block md:mr-0">
               <a
                   href="#"
                   class="no-underline hover:underline text-gray-800 hover:text-pink-500"
               >Log In</a
               >
+            </router-link>
+            <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+
+              <router-link to="dashboard"
+                  href="#"
+                  class="no-underline hover:underline text-gray-800 hover:text-pink-500"
+              >Dashboard</router-link
+              >
             </li>
             <li class="mt-2 inline-block mr-2 md:block md:mr-0">
 
               <a
-                  href="#"
+                  href="mailto:heckel.max@gmail.com"
                   class="no-underline hover:underline text-gray-800 hover:text-pink-500"
-              >Dashboard</a
+              >Contact</a
               >
             </li>
           </ul>
@@ -42,7 +50,7 @@
         <div class="flex-1">
           <p class="uppercase text-gray-500 md:mb-6">Donate</p>
           <p class="text-sm">Because this service is provided for free, the hosting bill relies upon donations to keep the lights on.
-            Please consider donating and do not give more than you can afford.</p>
+            Please consider donating and do not give more than you can afford. <a href="https://www.paypal.com/donate/?hosted_button_id=DVB5KRL2Z44N6" class="underline text-pink-500"> Click here to donate.</a></p>
 
         </div>
 
