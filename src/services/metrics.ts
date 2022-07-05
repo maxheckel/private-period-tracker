@@ -86,6 +86,9 @@ export function averageTimeBetween(): number {
 export function averageLength(): number {
   const daysToConsider = getDaysToConsider();
   let total = 0;
+  if (daysToConsider.length === 0){
+    return 0;
+  }
   let currentStart = daysToConsider[0].date;
   for (let x = 0; x < daysToConsider.length; x++) {
     if (daysToConsider[x].period_ended && x != daysToConsider.length - 1) {

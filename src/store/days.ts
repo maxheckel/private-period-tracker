@@ -122,6 +122,7 @@ export const days = reactive<Days>({
   },
   getDays(): DecryptedDay[] {
     if (this.decryptedDays.length > 0){
+      console.log(this.decryptedDays);
       return this.decryptedDays;
     }
     if (this.days.length === 0 && !this.loaded) {

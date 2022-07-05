@@ -110,22 +110,25 @@ const save = () => {
     lastPeriodStart.setDate(lastPeriodStart.getDate() + 1);
   }
 
-  // Add the days from their current period start till today
-  [y, m, d] = data.currentPeriodStart.split("-");
-  const currentPeriodStart = new Date();
-  currentPeriodStart.setDate(+d);
-  currentPeriodStart.setMonth(+m - 1);
-  currentPeriodStart.setFullYear(+y);
+  if (data.onItNow){
 
-  const numDays = diffBetweenDays(currentPeriodStart, new Date());
-  for (let x = 0; x < Math.ceil(numDays); x++) {
-    const newDay = {} as DecryptedDay;
-    newDay.date = new Date(currentPeriodStart.getTime());
-    newDay.on_period = true;
-    newDay.period_ended = false;
-    newDay.notes = "";
-    days.addDay(newDay);
-    currentPeriodStart.setDate(currentPeriodStart.getDate() + 1);
+    // Add the days from their current period start till today
+    [y, m, d] = data.currentPeriodStart.split("-");
+    const currentPeriodStart = new Date();
+    currentPeriodStart.setDate(+d);
+    currentPeriodStart.setMonth(+m - 1);
+    currentPeriodStart.setFullYear(+y);
+    const numDays = diffBetweenDays(currentPeriodStart, new Date());
+    for (let x = 0; x < Math.ceil(numDays)+1; x++) {
+      const newDay = {} as DecryptedDay;
+      newDay.date = new Date(currentPeriodStart.getTime());
+      newDay.on_period = true;
+      newDay.period_ended = false;
+      newDay.notes = "";
+      days.addDay(newDay);
+      currentPeriodStart.setDate(currentPeriodStart.getDate() + 1);
+    }
+
   }
 
   if (data.birthControl) {
@@ -143,7 +146,7 @@ const save = () => {
     newBc.average_days = data.length;
     birthControl.addBirthControl(newBc);
   }
-  // router.push({ path: "/dashboard" });
+  router.push({ path: "/dashboard" });
 };
 </script>
 
