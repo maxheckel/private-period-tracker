@@ -60,7 +60,7 @@ import AppLogo from "@/components/AppLogo.vue";
             </router-link>
           </li>
         </ul>
-        <div v-if="!isAuthed">
+        <div v-if="!authed">
           <RouterLink to="sign-up">
             <button
               id="navAction"

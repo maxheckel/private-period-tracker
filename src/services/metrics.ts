@@ -1,5 +1,5 @@
 import { days } from "@/store/days";
-import type { DecryptedDay } from "@/store/days";
+import type {DecryptedDay} from "@/store/days";
 import { birthControl } from "@/store/birthcontrol";
 
 export function isOnPeriod(): boolean {
@@ -16,53 +16,102 @@ export function getLastDay() {
   })[0];
 }
 
-export function getFirstDayOfCurrentPeriod() {
+export function lastPeriodEndDate(): Date|null{
   const daysToConsider = getDaysToConsider();
-  let couldBeNext = false;
-  let currentPeriodStart = daysToConsider[0].date;
+  let startDate = null;
   for (let x = 0; x < daysToConsider.length; x++) {
     if (daysToConsider[x].period_ended && x != daysToConsider.length - 1) {
-      couldBeNext = true;
-    }
-    if (couldBeNext && daysToConsider[x].on_period) {
-      currentPeriodStart = daysToConsider[x].date;
-      couldBeNext = false;
+      startDate = daysToConsider[x].date;
     }
   }
-  return currentPeriodStart;
+  return startDate;
 }
 
-export function getLastMonthsDays(): DecryptedDay[] {
-  let lastMonthMonth = new Date().getMonth() - 1;
-  let lastMonthYear = new Date().getFullYear();
-  if (lastMonthMonth == -1) {
-    lastMonthMonth = 11;
-    lastMonthYear = lastMonthYear - 1;
+export function estimatedStartDate(): Date|null{
+  let lastEnd = lastPeriodEndDate();
+  if (!lastEnd){
+    return null;
   }
-  return days.getDays().filter(function (day) {
-    if (day.date.getMonth() != lastMonthMonth) {
-      return false;
-    }
-    if (day.date.getFullYear() != lastMonthYear) {
-      return false;
-    }
 
-    return true;
-  });
+  lastEnd = new Date(lastEnd.getTime());
+  if (isOnPeriod()){
+    const nextEnd = estimatedEndDate();
+    if (!nextEnd){
+      return null;
+    }
+    lastEnd = new Date(nextEnd.getTime());
+  }
+  for(let x = 0; x < averageTimeBetween(); x++){
+    lastEnd.setDate(lastEnd.getDate() + 1);
+  }
+  return lastEnd;
 }
 
-export function getThisMonthsDays(): DecryptedDay[] {
-  return days.getDays().filter(function (day) {
-    if (day.date.getMonth() != new Date().getMonth()) {
-      return false;
-    }
-    return day.date.getFullYear() == new Date().getUTCFullYear();
-  });
+export function estimatedEndDate(): Date|null {
+  let currentStart = currentPeriodStart();
+  if (!currentStart){
+    return null;
+  }
+  currentStart = new Date(currentStart.getTime());
+  for(let x = 0; x < averageLength(); x++){
+    currentStart.setDate(currentStart.getDate() + 1);
+  }
+  return currentStart;
 }
 
-function getDaysToConsider() {
+export function currentPeriodStart(): Date|null {
+  const daysToConsider = getDaysToConsider();
+  let startDate = null;
+  for (let x = 0; x < daysToConsider.length; x++) {
+    if (daysToConsider[x].period_ended && x != daysToConsider.length - 1) {
+      startDate = daysToConsider[x + 1].date;
+    }
+  }
+  return startDate;
+}
+
+export function averageTimeBetween(): number {
+  const daysToConsider = getDaysToConsider();
+  let total = 0;
+  for (let x = 0; x < daysToConsider.length; x++) {
+    if (daysToConsider[x].period_ended && x != daysToConsider.length - 1) {
+      const endDate = daysToConsider[x].date;
+      const nextStart = daysToConsider[x + 1].date;
+      total += diffBetweenDays(endDate, nextStart);
+    }
+  }
+  return total / numberOfPeriods();
+}
+
+export function averageLength(): number {
+  const daysToConsider = getDaysToConsider();
+  let total = 0;
+  let currentStart = daysToConsider[0].date;
+  for (let x = 0; x < daysToConsider.length; x++) {
+    if (daysToConsider[x].period_ended && x != daysToConsider.length - 1) {
+      total += diffBetweenDays(currentStart, daysToConsider[x].date)
+      currentStart = daysToConsider[x].date;
+    }
+  }
+  return total / numberOfPeriods();
+}
+
+export function diffBetweenDays(earlier: Date, later: Date): number {
+  return Math.floor(
+    (Date.parse(later.toDateString()) - Date.parse(earlier.toDateString())) /
+      86400000
+  );
+}
+
+function numberOfPeriods(): number {
+  return getDaysToConsider().filter(function (day) {
+    return day.period_ended;
+  }).length;
+}
+
+function getDaysToConsider(): DecryptedDay[] {
   let sorted = days.getDays().sort(function (a, b) {
-    return b.date.getTime() - a.date.getTime();
+    return a.date.getTime() - b.date.getTime();
   });
 
   // If they're currently on birth control we need to only count days when
@@ -80,66 +129,4 @@ function getDaysToConsider() {
     });
   }
   return sorted;
-}
-
-export function getAverageDaysBetweenPeriod() {
-  const sorted = getDaysToConsider();
-  let numPeriods = 0;
-  let totalDays = 0;
-  for (let x = 0; x < sorted.length; x++) {
-    if (sorted[x].period_ended) {
-      if (x == sorted.length - 1) {
-        break;
-      }
-      const numDaysToAdd = Math.floor(
-        (Date.parse(sorted[x].date.toDateString()) -
-          Date.parse(sorted[x + 1].date.toDateString())) /
-          86400000
-      );
-      if (numDaysToAdd > 60) {
-        continue;
-      }
-      totalDays += numDaysToAdd;
-      numPeriods++;
-    }
-  }
-  return totalDays / numPeriods;
-}
-
-export function getAverageDaysOnPeriod(): number {
-  const sorted = getDaysToConsider();
-  let currentCount = 0;
-  let periodCount = 0;
-  let totalDays = 0;
-  for (let x = 0; x < sorted.length; x++) {
-    if (sorted[x].period_ended) {
-      currentCount++;
-      totalDays += currentCount;
-      periodCount++;
-      currentCount = 0;
-    }
-  }
-  return totalDays / periodCount;
-}
-
-export function getNextEstimatedPeriodStartDate(): Date|undefined {
-  if (days.getDays().length === 0){
-    return undefined;
-  }
-  const averageDaysBetweenPeriod = getAverageDaysBetweenPeriod();
-  const lastDay = getLastDay().date;
-  lastDay.setDate(lastDay.getDate() + averageDaysBetweenPeriod);
-  return lastDay;
-}
-
-export function getCurrentEstimatedPeriodEndDate(): Date|undefined {
-  if (days.getDays().length === 0){
-    return undefined;
-  }
-  const averageDaysOnPeriod = getAverageDaysOnPeriod();
-  const firstDayOfCurrentPeriod = getFirstDayOfCurrentPeriod();
-  firstDayOfCurrentPeriod.setDate(
-    firstDayOfCurrentPeriod.getDate() + averageDaysOnPeriod
-  );
-  return firstDayOfCurrentPeriod;
 }

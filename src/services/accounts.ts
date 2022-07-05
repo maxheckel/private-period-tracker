@@ -15,6 +15,8 @@ export function register(password: string) {
   eraseCookie(saltKey);
   eraseCookie(secretKey);
   eraseCookie(logincheckKey);
+  localStorage.removeItem("days");
+  localStorage.removeItem("birthControls");
   if (!password) {
     throw new Error("Password cannot be empty");
   }
@@ -52,11 +54,9 @@ export function login(password: string, salt: string | null = null) {
     // If the logincheck isn't set then this is their first time logging in probably
     if (!logincheck) {
       logincheck = encrypt("success", key);
-      console.log(logincheck);
       setCookie(logincheckKey, logincheck, 36500);
     }
     const decryptCheck = decrypt(logincheck, key);
-    console.log(decryptCheck);
     if (decryptCheck !== "success") {
       eraseCookie(secretKey);
       throw new Error("Invalid Password");

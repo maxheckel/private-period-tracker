@@ -6,6 +6,7 @@
     <div
       class="pt-24 container px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center"
     >
+
       <h1 class="my-4 text-5xl font-bold leading-tight">
         Let's get a baseline.
       </h1>
@@ -77,6 +78,7 @@ import { days } from "@/store/days";
 import type { BirthControlDecrypted } from "@/store/birthcontrol";
 import { birthControl } from "@/store/birthcontrol";
 import router from "@/router";
+import {diffBetweenDays} from "@/services/metrics";
 
 const data = reactive({
   length: 7,
@@ -95,17 +97,17 @@ const save = () => {
   lastPeriodStart.setDate(+d);
   lastPeriodStart.setMonth(+m - 1);
   lastPeriodStart.setFullYear(+y);
-  console.log(lastPeriodStart);
   for (let x = 0; x < data.length; x++) {
     const newDay = {} as DecryptedDay;
-    lastPeriodStart.setDate(lastPeriodStart.getDate() + 1);
-    newDay.date = lastPeriodStart;
+    newDay.date = new Date(lastPeriodStart.getTime());
     newDay.on_period = true;
+    newDay.period_ended = false;
     if (x == Math.ceil(data.length) - 1) {
       newDay.period_ended = true;
     }
     newDay.notes = "";
     days.addDay(newDay);
+    lastPeriodStart.setDate(lastPeriodStart.getDate() + 1);
   }
 
   // Add the days from their current period start till today
@@ -114,20 +116,16 @@ const save = () => {
   currentPeriodStart.setDate(+d);
   currentPeriodStart.setMonth(+m - 1);
   currentPeriodStart.setFullYear(+y);
-  const numDays = Math.floor(
-    (Date.parse(new Date().toDateString()) -
-      Date.parse(currentPeriodStart.toDateString())) /
-      86400000
-  );
 
+  const numDays = diffBetweenDays(currentPeriodStart, new Date());
   for (let x = 0; x < Math.ceil(numDays); x++) {
     const newDay = {} as DecryptedDay;
-    currentPeriodStart.setDate(currentPeriodStart.getDate() + 1);
-    newDay.date = currentPeriodStart;
+    newDay.date = new Date(currentPeriodStart.getTime());
     newDay.on_period = true;
     newDay.period_ended = false;
     newDay.notes = "";
     days.addDay(newDay);
+    currentPeriodStart.setDate(currentPeriodStart.getDate() + 1);
   }
 
   if (data.birthControl) {
@@ -145,7 +143,7 @@ const save = () => {
     newBc.average_days = data.length;
     birthControl.addBirthControl(newBc);
   }
-  router.push({ path: "/dashboard" });
+  // router.push({ path: "/dashboard" });
 };
 </script>
 
