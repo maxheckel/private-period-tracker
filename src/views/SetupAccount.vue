@@ -60,7 +60,7 @@
       ></setup-question>
       <div class="w-full">
         <button
-          @click="save"
+          @click="save()"
           class="inline-flex items-center px-4 py-2 bg-white text-pink-500 drop-shadow-lg mb-10 border border-transparent rounded-md font-semibold text-2xl text-white tracking-widest hover:bg-pink-700 active:bg-pink-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150"
         >
           Save
@@ -125,27 +125,27 @@ const save = () => {
       newDay.on_period = true;
       newDay.period_ended = false;
       newDay.notes = "";
-      days.addDay(newDay);
+      // days.addDay(newDay);
       currentPeriodStart.setDate(currentPeriodStart.getDate() + 1);
     }
 
   }
 
-  if (data.birthControl) {
-    const newBc = {} as BirthControlDecrypted;
-    newBc.name = data.birthControlType;
-    if (data.birthControlStartDate) {
-      const [y, m, d] = data.birthControlStartDate.split("-");
-      const bcStart = new Date();
-      bcStart.setDate(+d);
-      bcStart.setMonth(+m);
-      bcStart.setFullYear(+y);
-      newBc.start_date = bcStart;
-    }
-    newBc.active = true;
-    newBc.average_days = data.length;
-    birthControl.addBirthControl(newBc);
-  }
+  // if (data.birthControl) {
+  //   const newBc = {} as BirthControlDecrypted;
+  //   newBc.name = data.birthControlType;
+  //   if (data.birthControlStartDate) {
+  //     const [y, m, d] = data.birthControlStartDate.split("-");
+  //     const bcStart = new Date();
+  //     bcStart.setDate(+d);
+  //     bcStart.setMonth(+m);
+  //     bcStart.setFullYear(+y);
+  //     newBc.start_date = bcStart;
+  //   }
+  //   newBc.active = true;
+  //   newBc.average_days = data.length;
+  //   birthControl.addBirthControl(newBc);
+  // }
   router.push({ path: "/dashboard" });
 };
 </script>

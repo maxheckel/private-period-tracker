@@ -5,6 +5,7 @@ import { birthControl } from "@/store/birthcontrol";
 export function isOnPeriod(): boolean {
   try{
     const lastDay = getLastDay();
+    console.log(lastDay)
     if (lastDay){
       return !lastDay.period_ended;
     }
@@ -12,7 +13,7 @@ export function isOnPeriod(): boolean {
   } catch (e:any){
     return false;
   }
-
+  return false;
 }
 
 export function getLastDay(): DecryptedDay|null {
@@ -93,7 +94,7 @@ export function averageTimeBetween(): number {
   }
 
   // Subtract one because we are averaging on the time between periods not number of periods themselves
-  return total / (numberOfPeriods()-1);
+  return total / (numberOfPeriods() - 1);
 }
 
 export function averageLength(): number {
@@ -112,9 +113,13 @@ export function diffBetweenDays(earlier: Date, later: Date): number {
 }
 
 function numberOfPeriods(): number {
-  return getDaysToConsider().filter(function (day) {
+  let count = getDaysToConsider().filter(function (day) {
     return day.period_ended;
   }).length;
+  if (!getDaysToConsider().reverse()[0].period_ended){
+    count++;
+  }
+  return count;
 }
 
 function getDaysToConsider(): DecryptedDay[] {
