@@ -86,7 +86,7 @@
                       />
                     </label>
                   </div>
-                  <div class="mt-8" v-if="data.one_day && data.currently_on_period">
+                  <div class="mt-8" v-if="data.one_day">
                     <label>
                       Did your period end on {{ startDateReadable }}?
                       <select class="mt-2 rounded-3xl w-full" v-model="data.ended">
