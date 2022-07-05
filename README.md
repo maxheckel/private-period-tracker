@@ -47,7 +47,7 @@ npm run lint
 
 # Contributing
 
-All are welcome to contribute to this project.  Simply open a pull request and it will be reviewed and approved as soon as possible depending on current PR volume/size.
+All are welcome to contribute to this project.  Simply open a pull request, and it will be reviewed and approved as soon as possible depending on current PR volume/size.
 
 ## Deployments
 This app uses [Trunk Based Deployments](https://trunkbaseddevelopment.com/). It is hosted on AWS and deployed when the main branch is merged.
