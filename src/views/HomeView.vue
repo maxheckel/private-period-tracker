@@ -52,11 +52,11 @@ const showModal = function (date: Date | null = null) {
             Your data never leaves your device; there's no data stored anywhere
             but with you.
           </p>
-          <button
+          <router-link to="sign-up"
             class="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
           >
             Sign Up
-          </button>
+          </router-link>
         </div>
         <!--Right Col-->
         <div class="w-full md:w-3/5 py-6 text-center">
