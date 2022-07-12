@@ -1,9 +1,12 @@
 import type {DecryptedDay} from "@/store/days";
 import {days} from "@/store/days";
 import {birthControl} from "@/store/birthcontrol";
+import {isAuthed} from "@/services/accounts";
 
 export function isOnPeriod(): boolean {
-
+  if (!isAuthed()){
+    return false;
+  }
   try{
     const lastDay = getLastDay();
     if (lastDay){

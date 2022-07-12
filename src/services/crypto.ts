@@ -1,10 +1,11 @@
-import { getCookie, KEY } from "@/services/cookies";
+import { getCookie } from "@/services/cookies";
 import { AES, enc } from "crypto-ts";
 import { v4 as uuidv4 } from "uuid";
+import { secretKey } from "@/services/accounts";
 
 export function encrypt(input: string, key: string | null = null): string {
   if (key === null) {
-    key = getCookie(KEY);
+    key = sessionStorage.getItem(secretKey);
   }
   if (key) {
     return AES.encrypt(input, key).toString();
@@ -14,7 +15,7 @@ export function encrypt(input: string, key: string | null = null): string {
 
 export function decrypt(input: string, key: string | null = null): string {
   if (key === null) {
-    key = getCookie(KEY);
+    key = sessionStorage.getItem(secretKey);
   }
   if (key) {
     return AES.decrypt(input, key).toString(enc.Utf8);

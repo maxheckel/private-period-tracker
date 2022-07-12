@@ -1,6 +1,3 @@
-export const KEY = "key";
-export const SALT = "salt";
-
 export function setCookie(name: string, value: string, days: number) {
   let expires = "";
   if (days) {

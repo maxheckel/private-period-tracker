@@ -148,10 +148,10 @@ export const days = reactive<Days>({
         const objectStore = db.transaction("days").objectStore("days");
         objectStore.openCursor().onsuccess = (event: any) => {
           const cursor = event.target.result;
-          console.log(cursor);
+
           if (cursor) {
             raw = cursor.value.data;
-            console.log("Loaded Database" + cursor.value.data);
+            console.log("Loaded Database");
             if (!raw) {
               this.loaded = true;
               return;

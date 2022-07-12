@@ -2,6 +2,7 @@ import { eraseCookie, getCookie, setCookie } from "@/services/cookies";
 import { Md5 } from "ts-md5";
 import { decrypt, encrypt, UUID } from "@/services/crypto";
 import { reactive } from "vue";
+import {days} from "@/store/days";
 
 export const logincheckKey = "logincheck";
 export const secretKey = "key";
@@ -13,7 +14,7 @@ export const account = reactive({
 
 export function register(password: string) {
   eraseCookie(saltKey);
-  eraseCookie(secretKey);
+  sessionStorage.removeItem(secretKey);
   eraseCookie(logincheckKey);
   localStorage.removeItem("days");
   localStorage.removeItem("birthControls");
@@ -29,7 +30,7 @@ export function register(password: string) {
 }
 
 export function isAuthed(): boolean {
-  account.isAuthed = !!getCookie(secretKey);
+  account.isAuthed = !!sessionStorage.getItem(secretKey);
   return account.isAuthed;
 }
 
@@ -43,7 +44,7 @@ export function login(password: string, salt: string | null = null) {
   }
   if (salt) {
     const key = Md5.hashStr(salt + password);
-    setCookie(secretKey, key, 7);
+    sessionStorage.setItem(secretKey, key);
 
     // After generating the secret key check if it can successfully be used to decrypt
     // if not then the password is incorrect.
@@ -55,14 +56,16 @@ export function login(password: string, salt: string | null = null) {
     }
     const decryptCheck = decrypt(logincheck, key);
     if (decryptCheck !== "success") {
-      eraseCookie(secretKey);
+      sessionStorage.removeItem(secretKey);
       throw new Error("Invalid Password");
     }
+    days.loaded = false;
+    days.load();
     account.isAuthed = true;
   }
 }
 
 export function logout() {
-  eraseCookie(secretKey);
+  sessionStorage.removeItem(secretKey);
   account.isAuthed = false;
 }
