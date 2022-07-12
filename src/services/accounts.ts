@@ -1,7 +1,7 @@
-import {eraseCookie, getCookie, setCookie} from "@/services/cookies";
-import {Md5} from "ts-md5";
-import {decrypt, encrypt} from "@/services/crypto";
-import {reactive} from "vue";
+import { eraseCookie, getCookie, setCookie } from "@/services/cookies";
+import { Md5 } from "ts-md5";
+import { decrypt, encrypt, UUID } from "@/services/crypto";
+import { reactive } from "vue";
 
 export const logincheckKey = "logincheck";
 export const secretKey = "key";
@@ -9,7 +9,7 @@ export const saltKey = "salt";
 
 export const account = reactive({
   isAuthed: false,
-})
+});
 
 export function register(password: string) {
   eraseCookie(saltKey);
@@ -23,13 +23,10 @@ export function register(password: string) {
   if (password.length < 7) {
     throw new Error("Password must be at least 7 characters");
   }
-  const salt = crypto.randomUUID();
+  const salt = UUID();
   setCookie(saltKey, salt, 36500);
   login(password, salt);
-
 }
-
-
 
 export function isAuthed(): boolean {
   account.isAuthed = !!getCookie(secretKey);

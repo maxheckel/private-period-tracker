@@ -1,5 +1,5 @@
 import { reactive } from "vue";
-import { decrypt, encrypt } from "@/services/crypto";
+import { decrypt, encrypt, UUID } from "@/services/crypto";
 
 export interface BirthControlDecrypted {
   name: string;
@@ -36,7 +36,7 @@ interface BirthControlTracker {
 function encryptBirthControl(bc: BirthControlDecrypted): BirthControlEncrypted {
   const enc = {} as BirthControlEncrypted;
   if (!bc.uuid) {
-    bc.uuid = crypto.randomUUID();
+    bc.uuid = UUID();
   }
   enc.uuid = bc.uuid;
   enc.active = encrypt(enc.uuid + "|" + enc.active ? "1" : "0");

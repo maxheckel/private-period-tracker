@@ -1,5 +1,6 @@
 import { reactive } from "vue";
-import { decrypt, encrypt } from "@/services/crypto";
+import { decrypt, encrypt, UUID } from "@/services/crypto";
+const version = 4;
 
 interface EncryptedDay {
   date: string;
@@ -18,15 +19,22 @@ export interface DecryptedDay {
   period_ended: boolean;
   uuid: string;
 }
+
 interface Days {
   days: EncryptedDay[];
   decryptedDays: DecryptedDay[];
   loaded: boolean;
+
   addDay(day: DecryptedDay): void;
+
   store(): void;
+
   load(): void;
+
   removeDay(day: DecryptedDay): void;
+
   updateDay(day: DecryptedDay): void;
+
   getDays(): DecryptedDay[];
 }
 
@@ -49,7 +57,7 @@ function decryptDay(day: EncryptedDay): DecryptedDay {
 function encryptDay(day: DecryptedDay) {
   const encrypted = {} as EncryptedDay;
   if (!day.uuid) {
-    day.uuid = crypto.randomUUID();
+    day.uuid = UUID();
   }
   encrypted.uuid = day.uuid;
   encrypted.date = encrypt(encrypted.uuid + "|" + day.date.toDateString());
@@ -73,32 +81,123 @@ export const days = reactive<Days>({
   decryptedDays: [],
   loaded: false,
   store() {
-    localStorage.setItem("days", JSON.stringify(this.days));
+    console.log("storing");
+    // localStorage.setItem("days", JSON.stringify(this.days));
+    // We trust that the schema has already been built because it is loaded always before it's stored
+    const request = window.indexedDB.open("ppt", version);
+    request.onsuccess = () => {
+      const db = request.result;
+      const transaction = db.transaction("days", "readwrite"); // (1)
+      const days = transaction.objectStore("days"); // (2)
+      try {
+        console.log('adding')
+        days.put({ id: 1, data: JSON.stringify(this.days) });
+      } catch (e) {
+        console.log(e)
+        days.add({ id: 1, data: JSON.stringify(this.days) });
+      }
+
+      console.log(this.days);
+    };
+    request.onerror = (err) => {
+      console.log(err);
+    };
   },
   load() {
     if (this.loaded) {
       return;
     }
-    const raw = localStorage.getItem("days");
-    if (!raw) {
+    let raw = localStorage.getItem("days");
+    // Load from indexedDB instead
+    if (window.indexedDB) {
+      const request = window.indexedDB.open("ppt", version);
+      request.onupgradeneeded = (event) => {
+        console.log("here");
+        const db = event?.target?.result;
+        const objectStore = db.createObjectStore("days", {
+          keyPath: "id",
+          autoIncrement: true,
+        });
+        objectStore.createIndex("data", "data", { unique: false });
+        objectStore.transaction.oncomplete = () => {
+          // We just created the database, if we have data, load it in
+          if (!raw) {
+            this.loaded = true;
+            return;
+          }
+          const daysData = JSON.parse(raw);
+          this.days = [];
+          daysData.forEach((day: EncryptedDay) => {
+            this.days.push(day);
+          });
+          const decrypted = [] as DecryptedDay[];
+          this.days.forEach(function (day) {
+            decrypted.push(decryptDay(day));
+          });
+          this.decryptedDays = decrypted;
+          this.loaded = true;
+          const transaction = db.transaction("days", "readwrite"); // (1)
+          const days = transaction.objectStore("days"); // (2)
+          days.add({ id: 1, data: JSON.stringify(this.days) });
+        };
+      };
+      // Still load the data even if the schema already exists
+      request.onsuccess = () => {
+        console.log("loading - no creation")
+        const db = request.result;
+        const objectStore = db.transaction("days").objectStore("days");
+        objectStore.openCursor().onsuccess = (event: any) => {
+          const cursor = event.target.result;
+          console.log(cursor);
+          if (cursor) {
+            raw = cursor.value.data;
+            console.log("Loaded Database" + cursor.value.data);
+            if (!raw) {
+              this.loaded = true;
+              return;
+            }
+            const daysData = JSON.parse(raw);
+            this.days = [];
+            daysData.forEach((day: EncryptedDay) => {
+              this.days.push(day);
+            });
+            const decrypted = [] as DecryptedDay[];
+            this.days.forEach(function (day) {
+              decrypted.push(decryptDay(day));
+            });
+            this.decryptedDays = decrypted;
+            this.loaded = true;
+            const check = localStorage.getItem("days");
+            if (check != null){
+
+              this.store();
+              // localStorage.removeItem("days");
+            }
+            cursor.continue();
+          }
+        };
+      };
+      if (!raw) {
+        this.loaded = true;
+        return;
+      }
+      const daysData = JSON.parse(raw);
+      this.days = [];
+      daysData.forEach((day: EncryptedDay) => {
+        this.days.push(day);
+      });
+      const decrypted = [] as DecryptedDay[];
+      this.days.forEach(function (day) {
+        decrypted.push(decryptDay(day));
+      });
+      this.decryptedDays = decrypted;
       this.loaded = true;
-      return;
     }
-    const daysData = JSON.parse(raw);
-    this.days = [];
-    daysData.forEach((day: EncryptedDay) => {
-      this.days.push(day);
-    });
-    const decrypted = [] as DecryptedDay[];
-    this.days.forEach(function (day) {
-      decrypted.push(decryptDay(day));
-    });
-    this.decryptedDays = decrypted;
-    this.loaded = true;
+
   },
   addDay(day: DecryptedDay) {
     if (!day.uuid) {
-      day.uuid = crypto.randomUUID();
+      day.uuid = UUID();
     }
 
     this.decryptedDays.every((check) => {
