@@ -1,5 +1,10 @@
 <template>
+  <main v-if="!hasIndexedDB()">
+    <div class="h-20 gradient"></div>
+    <div class="text-center m-20 text-4xl font-bold text-black">We've detected you do not have IndexedDB available on your browser.  It is required for the site to work.  Please update your browser or use a different device.</div>
+  </main>
   <main
+      v-if="hasIndexedDB()"
     class="leading-normal tracking-normal text-white gradient"
     style="font-family: 'Source Sans Pro', sans-serif"
   >
@@ -55,6 +60,12 @@
 import { reactive } from "vue";
 import {isAuthed, login} from "@/services/accounts";
 import router from "@/router";
+
+
+const hasIndexedDB = () => {
+  return !!window.indexedDB;
+}
+
 
 const data = reactive({
   password: "",

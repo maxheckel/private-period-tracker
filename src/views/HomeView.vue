@@ -13,12 +13,12 @@ const data = reactive({
   onPeriod: isOnPeriod(),
 });
 
-
 const showModal = function (date: Date | null = null) {
   add.show(date);
 };
 </script>
 <template>
+
   <main
     class="leading-normal tracking-normal text-white gradient"
     style="font-family: 'Source Sans Pro', sans-serif"
