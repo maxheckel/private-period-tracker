@@ -113,6 +113,8 @@ export const days = reactive<Days>({
       const request = window.indexedDB.open("ppt", version);
       request.onupgradeneeded = (event) => {
         console.log("here");
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         const db = event?.target?.result;
         const objectStore = db.createObjectStore("days", {
           keyPath: "id",
