@@ -115,13 +115,13 @@ const nextMonthYear = computed(() => {
       </div>
     </div>
     <div class="flex justify-center">
-      <div @click="previousMonth" class="rounded-3xl text-sm border border-2 px-4 mx-2 py-2 hover:bg-pink-600 cursor-pointer hover:text-white border-pink-300 text-black">
+      <div @click="previousMonth" class="rounded-3xl text-sm border border-2 px-4 mx-2 py-2 hover:bg-pink-600 cursor-pointer hover:text-white border-pink-300 text-ppt-black">
         &lt;
       </div>
-      <div @click="resetMonths" class="rounded-3xl text-sm border border-2 px-4 mx-2 py-2 hover:bg-pink-600 cursor-pointer hover:text-white border-pink-300 text-black">
+      <div @click="resetMonths" class="rounded-3xl text-sm border border-2 px-4 mx-2 py-2 hover:bg-pink-600 cursor-pointer hover:text-white border-pink-300 text-ppt-black">
         This Month
       </div>
-      <div @click="nextMonth" class="rounded-3xl text-sm border border-2 px-4 mx-2 py-2 hover:bg-pink-600 cursor-pointer hover:text-white border-pink-300 text-black">
+      <div @click="nextMonth" class="rounded-3xl text-sm border border-2 px-4 mx-2 py-2 hover:bg-pink-600 cursor-pointer hover:text-white border-pink-300 text-ppt-black">
         >
       </div>
     </div>

@@ -1,15 +1,17 @@
 <template>
   <router-link to="/">
     <div
-      class="toggleColour text-black no-underline hover:no-underline font-bold text-2xl lg:text-4xl"
+      class="toggleColour text-ppt-black no-underline hover:no-underline font-bold text-2xl lg:text-4xl"
     >
-      [Private] Period Tracker <div class="relative bg-red-500 rounded-full ml-[-5px] w-2 h-2 md:w-3 md:h-3 inline-block"> </div>
+      [Private] Period Tracker <LogoDot />
     </div>
   </router-link>
 </template>
 
 <script>
+import LogoDot from "@/components/LogoDot.vue";
 export default {
   name: "AppLogo",
+  components: { LogoDot },
 };
 </script>

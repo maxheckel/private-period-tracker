@@ -3,7 +3,7 @@
   <footer class="bg-white">
     <div class="container mx-auto px-8">
       <div class="w-full flex flex-col md:flex-row py-6">
-        <div class="flex-1 mb-6 text-black">
+        <div class="flex-1 mb-6 text-ppt-black">
           <a
               class="toggleColour text-gray-700 no-underline hover:no-underline font-bold text-2xl lg:text-4xl"
               href="#"
@@ -17,14 +17,14 @@
             <router-link to="sign-up" class="mt-2 inline-block mr-2 md:block md:mr-0">
               <a
                   href="#"
-                  class="no-underline hover:underline text-gray-800 hover:text-pink-500"
+                  class="no-underline hover:underline text-ppt-black hover:text-pink-500"
               >Sign Up</a
               >
             </router-link>
             <router-link to="login" class="mt-2 inline-block mr-2 md:block md:mr-0">
               <a
                   href="#"
-                  class="no-underline hover:underline text-gray-800 hover:text-pink-500"
+                  class="no-underline hover:underline text-ppt-black hover:text-pink-500"
               >Log In</a
               >
             </router-link>
@@ -32,7 +32,7 @@
 
               <router-link to="dashboard"
                   href="#"
-                  class="no-underline hover:underline text-gray-800 hover:text-pink-500"
+                  class="no-underline hover:underline text-ppt-black hover:text-pink-500"
               >Dashboard</router-link
               >
             </li>
@@ -40,7 +40,7 @@
 
               <a
                   href="mailto:heckel.max@gmail.com"
-                  class="no-underline hover:underline text-gray-800 hover:text-pink-500"
+                  class="no-underline hover:underline text-ppt-black hover:text-pink-500"
               >Contact</a
               >
             </li>

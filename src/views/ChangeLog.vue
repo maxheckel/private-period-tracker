@@ -12,11 +12,11 @@ function setupNavHeadeer() {
     header.classList.add("bg-white");
     navaction.classList.remove("bg-white");
     navaction.classList.add("gradient");
-    navaction.classList.remove("text-gray-800");
+    navaction.classList.remove("text-ppt-black");
     navaction.classList.add("text-white");
     //Use to switch toggleColour colours
     for (let i = 0; i < toToggle.length; i++) {
-      toToggle[i].classList.add("text-gray-800");
+      toToggle[i].classList.add("text-ppt-black");
       toToggle[i].classList.remove("text-white");
     }
     header.classList.add("shadow");
@@ -33,11 +33,11 @@ function setupNavHeadeer() {
   header.classList.add("bg-white");
   navaction.classList.remove("bg-white");
   navaction.classList.add("gradient");
-  navaction.classList.remove("text-gray-800");
+  navaction.classList.remove("text-ppt-black");
   navaction.classList.add("text-white");
   //Use to switch toggleColour colours
   for (let i = 0; i < toToggle.length; i++) {
-    toToggle[i].classList.add("text-gray-800");
+    toToggle[i].classList.add("text-ppt-black");
     toToggle[i].classList.remove("text-white");
   }
   header.classList.add("shadow");

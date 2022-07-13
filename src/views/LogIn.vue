@@ -1,7 +1,7 @@
 <template>
   <main v-if="!hasIndexedDB()">
     <div class="h-20 gradient"></div>
-    <div class="text-center m-20 text-4xl font-bold text-black">We've detected you do not have IndexedDB available on your browser.  It is required for the site to work.  Please update your browser or use a different device.</div>
+    <div class="text-center m-20 text-4xl font-bold text-ppt-black">We've detected you do not have IndexedDB available on your browser.  It is required for the site to work.  Please update your browser or use a different device.</div>
   </main>
   <main
       v-if="hasIndexedDB()"
@@ -12,7 +12,7 @@
     <div class="">
       <div class="flex flex-col sm:justify-center items-center sm:pt-0 pt-20">
         <div
-          class="w-full text-black sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg"
+          class="w-full text-ppt-black sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg"
         >
           <div>
             <div v-if="data.error != null" class="text-red-500">
