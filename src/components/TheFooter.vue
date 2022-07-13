@@ -4,15 +4,7 @@
     <div class="container mx-auto px-8">
       <div class="w-full flex flex-col md:flex-row py-6">
         <div class="flex-1 mb-6 text-ppt-black">
-          <a
-              class="toggleColour text-gray-700 no-underline hover:no-underline font-bold text-2xl lg:text-4xl"
-              href="#"
-          >
-            Private Period Tracker
-          </a>
-        </div>
-        <div class="flex-1">
-          <p class="uppercase text-gray-500 md:mb-6">Links</p>
+          <AppLogo/>
           <ul class="list-reset mb-6">
             <router-link to="sign-up" class="mt-2 inline-block mr-2 md:block md:mr-0">
               <a
@@ -31,8 +23,8 @@
             <li class="mt-2 inline-block mr-2 md:block md:mr-0">
 
               <router-link to="dashboard"
-                  href="#"
-                  class="no-underline hover:underline text-ppt-black hover:text-pink-500"
+                           href="#"
+                           class="no-underline hover:underline text-ppt-black hover:text-pink-500"
               >Dashboard</router-link
               >
             </li>
@@ -46,7 +38,8 @@
             </li>
           </ul>
         </div>
-        <div class="flex-1"></div>
+
+
         <div class="flex-1">
           <p class="uppercase text-gray-500 md:mb-6">Donate</p>
           <p class="text-sm">Because this service is provided for free, the hosting bill relies upon donations to keep the lights on.
@@ -60,7 +53,9 @@
 </template>
 
 <script>
+import AppLogo from "@/components/AppLogo.vue";
 export default {
-  name: "TheFooter"
+  name: "TheFooter",
+  components: {AppLogo}
 }
 </script>

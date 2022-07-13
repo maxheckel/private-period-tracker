@@ -1,5 +1,5 @@
 <template>
-  <div class="relative bg-red-500 rounded-full ml-[-5px] w-2 h-2 md:w-3 md:h-3 inline-block"> </div>
+  <div class="relative bg-red-500 rounded-full ml-[-5px] w-2 h-2 md:w-2 md:h-2 inline-block"> </div>
 </template>
 
 <script>

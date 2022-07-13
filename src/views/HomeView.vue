@@ -2,6 +2,7 @@
 import woman from "./../assets/woman.svg";
 import security from "./../assets/security.svg";
 import opensource from "./../assets/open-source.svg";
+import lightbulb from "./../assets/lightbulb.svg";
 import { isAuthed } from "@/services/accounts";
 import { isOnPeriod } from "@/services/metrics";
 import { reactive } from "vue";
@@ -112,7 +113,7 @@ const showModal = function (date: Date | null = null) {
         </svg>
       </div>
     </div>
-    <section class="bg-white border-b py-8">
+    <section class="bg-white py-8">
       <div class="container max-w-5xl mx-auto m-8">
         <h1
           class="w-full my-20 text-4xl font-bold leading-tight text-center text-ppt-black"
@@ -174,12 +175,17 @@ const showModal = function (date: Date | null = null) {
         </div>
       </div>
     </section>
-    <section class="bg-white border-b py-8">
+    <section class="container mx-auto border border-ppt-blue-500 rounded-xl border-2 p-4 text-center text-ppt-black">
+      <div class="inline-block absolute mt-[-40px] px-2 py-3 rounded-full border border-ppt-blue-500 bg-ppt-blue-300"><img :src="lightbulb" /></div>
+      <span class="block font-bold text-lg tracking-wide mt-4">Find some issues or have feature requests?</span>
+      <a href="https://github.com/maxheckel/private-period-tracker/issues" target="_blank" class="underline font-light tracking-widest text-lg">Please submit your feedback on our GitHub page!</a>
+    </section>
+    <section class="bg-ppt-blue-300 mt-20 bg-white  py-8">
       <div class="container mx-auto flex flex-wrap pt-4 pb-12">
         <h1
-          class="w-full my-2 text-5xl font-bold leading-tight text-center text-ppt-black"
+          class="w-full my-2 text-3xl font-bold leading-tight text-center text-ppt-black"
         >
-          How does it work?
+          How it works <LogoDot/>
         </h1>
         <div class="w-full mb-4">
           <div
@@ -191,7 +197,7 @@ const showModal = function (date: Date | null = null) {
             class="flex-1 bg-white rounded-t rounded-b-none overflow-hidden shadow"
           >
             <div class="flex flex-wrap no-underline hover:no-underline">
-              <div class="w-full font-bold text-xl text-ppt-black px-6">
+              <div class="mt-4 w-full font-bold text-xl text-ppt-black px-6">
                 What is "Zero-Trust" security?
               </div>
               <p class="text-ppt-black text-base px-6 mb-5">
@@ -219,18 +225,18 @@ const showModal = function (date: Date | null = null) {
               href="#"
               class="flex flex-wrap no-underline hover:no-underline"
             >
-              <div class="w-full font-bold text-xl text-ppt-black px-6">
-                Local Storage
+              <div class="mt-4 w-full font-bold text-xl text-ppt-black px-6">
+                Data Exclusively On Your Device
               </div>
               <p class="text-ppt-black text-base px-6 mb-5">
                 When you add data (such as dates of your period) the app
                 encrypts and then saves it in your browser's storage using a
                 tool called
                 <a
-                  href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage"
+                  href="https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API"
                   class="text-pink-500 underline"
-                  >Local Storage</a
-                >.
+                  >IndexedDB</a
+                >.  The only way for anyone to access your data is to have your password.
               </p>
             </div>
           </div>
@@ -243,7 +249,7 @@ const showModal = function (date: Date | null = null) {
               href="#"
               class="flex flex-wrap no-underline hover:no-underline"
             >
-              <div class="w-full font-bold text-xl text-ppt-black px-6">
+              <div class="mt-4 w-full font-bold text-xl text-ppt-black px-6">
                 Single device or multiple
               </div>
               <p class="text-ppt-black text-base px-6 mb-5">
@@ -295,27 +301,6 @@ const showModal = function (date: Date | null = null) {
         </g>
       </g>
     </svg>
-    <section class="container mx-auto text-center py-6 mb-12">
-      <h1
-        class="w-full my-2 text-5xl font-bold leading-tight text-center text-white"
-      >
-        Get Started Today
-      </h1>
-      <div class="w-full mb-4">
-        <div
-          class="h-1 mx-auto bg-white w-1/6 opacity-25 my-0 py-0 rounded-t"
-        ></div>
-      </div>
-      <h3 class="my-4 text-3xl leading-tight">
-        Start tracking your period knowing your data is safe today.
-      </h3>
-      <router-link to="/sign-up">
-        <button
-          class="mx-auto lg:mx-0 hover:underline bg-white text-ppt-black font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
-        >
-          Sign Up
-        </button>
-      </router-link>
-    </section>
+
   </main>
 </template>

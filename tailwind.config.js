@@ -7,6 +7,7 @@ module.exports = {
     extend: {
       colors: {
         "ppt-blue": {
+          500: "#B1DEF1",
           400: "#DFF5FE",
           300: "#F3FBFF",
         },

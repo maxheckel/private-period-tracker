@@ -5,7 +5,7 @@
   </main>
   <main
       v-if="hasIndexedDB()"
-    class="leading-normal tracking-normal text-white gradient"
+    class="leading-normal tracking-normal text-ppt-black gradient"
     style="font-family: 'Source Sans Pro', sans-serif"
   >
     <!-- This example requires Tailwind CSS v2.0+ -->
@@ -114,7 +114,7 @@
     <div class="h-20"></div>
     <div class="md:grid md:grid-cols-2">
       <div class="flex flex-col sm:justify-center items-center sm:pt-0 pt-20">
-        <h1 class="mt-4 text-4xl font-bold text-pink-50 leading-tight">
+        <h1 class="mt-4 text-4xl font-bold text-ppt-black leading-tight">
           Sign Up
         </h1>
         <div
