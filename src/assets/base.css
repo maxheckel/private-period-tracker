@@ -2,3 +2,9 @@
 .gradient {
     background: linear-gradient(90deg, #d53369 0%, #daae51 100%);
 }
+
+.nav-gradient {
+    -moz-box-shadow: inset 0 -10px 10px -10px rgba(0,0,0, 0.5);
+    -webkit-box-shadow: inset 0 -10px 10px -10px rgba(0,0,0, 0.5);
+    box-shadow: inset 0 -10px 10px -10px rgba(0,0,0, 0.5);
+}

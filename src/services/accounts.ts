@@ -7,6 +7,7 @@ import {days} from "@/store/days";
 export const logincheckKey = "logincheck";
 export const secretKey = "key";
 export const saltKey = "salt";
+export const lastLoginKey = "lastlogin";
 
 export const account = reactive({
   isAuthed: false,
@@ -36,6 +37,10 @@ export function isAuthed(): boolean {
 
 export function hasAccount(): boolean {
   return !!getCookie(saltKey);
+}
+
+export function setLastLoginCookie(){
+  setCookie(lastLoginKey, new Date().getTime().toString(), 360000);
 }
 
 export function login(password: string, salt: string | null = null) {

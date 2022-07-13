@@ -1,4 +1,3 @@
-import { getCookie } from "@/services/cookies";
 import { AES, enc } from "crypto-ts";
 import { v4 as uuidv4 } from "uuid";
 import { secretKey } from "@/services/accounts";

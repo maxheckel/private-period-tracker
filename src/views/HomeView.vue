@@ -6,7 +6,6 @@ import { isAuthed } from "@/services/accounts";
 import { isOnPeriod } from "@/services/metrics";
 import { reactive } from "vue";
 import { add } from "@/store/add";
-import {UUID} from "@/services/crypto";
 
 const data = reactive({
   authed: isAuthed(),
